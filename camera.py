@@ -9,7 +9,6 @@ class Camera:
         self.DISPLAY_W, self.DISPLAY_H = 1280, 720
         self.CONST = vec(-self.DISPLAY_W / 2 + player.rect.w / 2, -self.player.ground_y + 20)
     def scroll(self):
-        print(self.offset.x)
         self.offset_float.x += (self.player.rect.x - self.offset_float.x + self.CONST.x)
         self.offset_float.y += (self.player.rect.y - self.offset_float.y + self.CONST.y)
         self.offset.x, self.offset.y = int(self.offset_float.x), int(self.offset_float.y)

@@ -45,9 +45,9 @@ class Game():
         self.enemy_group.add(self.dog)
         self.enemy_group.add(self.dog2)
 
-        self.all_sprites.add(self.player)
-        self.all_sprites.add(self.dog)
-        self.all_sprites.add(self.dog2)
+        # self.all_sprites.add(self.player)
+        # self.all_sprites.add(self.dog)
+        # self.all_sprites.add(self.dog2)
 
         self.camera = Camera(self.player)
 
@@ -94,10 +94,10 @@ class Game():
             for enemy in self.enemy_group:
                 enemy.rect.x  -= self.camera.offset.x
                 enemy.rect.y -= self.camera.offset.y
-            self.dog.update(self.player_group)
-            self.dog2.update(self.player_group)
+
+            self.enemy_group.update(self.player_group)
             
-            self.all_sprites.draw(self.screen)
+
 
     #     canvas.blit(house, (0 - camera.offset.x, 0 - camera.offset.y))
     # canvas.blit(cat.current_image,(cat.rect.x - camera.offset.x, cat.rect.y - camera.offset.y))
@@ -106,12 +106,16 @@ class Game():
             for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 1, 0).keys():
                 if pygame.mixer and self.bark is not None:
                     self.bark.play()
+                    enemy.kill()
                 print("collide")
 
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)
             self.camera.scroll()
+
+            self.enemy_group.draw(self.screen)
+            self.player_group.draw(self.screen)
             self.window.blit(self.screen, (0,0))
             pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
             pygame.display.update()
