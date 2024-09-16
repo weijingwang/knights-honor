@@ -20,6 +20,8 @@ class Enemy(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, (self.x,0))
     def update(self, player_group):
+        self.x = self.rect.x
+        self.y = self.rect.y
         # collided_player = pygame.sprite.spritecollideany(self, player_group)
         # if collided_player:
         #     self.bark.play()

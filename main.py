@@ -1,10 +1,12 @@
 import pygame
 from player import PlayerClass
 from enemy import Enemy
+from camera import Camera
 
 class Game():
     """basic game"""
     def __init__(self):
+        
         pygame.mixer.pre_init()
         pygame.init()
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
@@ -17,7 +19,9 @@ class Game():
         self.DISPLAY_W, self.DISPLAY_H = 1280, 720
         self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
 
-        self.screen = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
+        self.screen = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
+        self.window = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
+
         self.done = False
 
         self.font = pygame.font.get_default_font()
@@ -45,7 +49,10 @@ class Game():
         self.all_sprites.add(self.dog)
         self.all_sprites.add(self.dog2)
 
+        self.camera = Camera(self.player)
 
+        self.bgx=0
+        self.bgy=0
 
 
 
@@ -70,15 +77,30 @@ class Game():
                 #     if event.key == pygame.K_UP: self.UP_KEY = True
     def game_loop(self):
         while not self.done:
+            self.screen.fill((0,0,0))
             self.check_events()
-            self.screen.blit(self.bg1, (0,0))
-            self.screen.blit(self.bg2, (0,0))
-            self.screen.blit(self.bg3, (0,0))
+
+            self.bgx -= self.camera.offset.x
+            self.bgy -= self.camera.offset.y
+            self.screen.blit(self.bg1, (self.bgx, self.bgy))
+            self.screen.blit(self.bg2, (self.bgx, self.bgy))
+            self.screen.blit(self.bg3, (self.bgx, self.bgy))
+            
+            self.player.rect.x = self.player.rect.x - self.camera.offset.x
+            self.player.rect.y = self.player.rect.y - self.camera.offset.y
+
             self.player.update(self.enemy_group)
+
+            for enemy in self.enemy_group:
+                enemy.rect.x  -= self.camera.offset.x
+                enemy.rect.y -= self.camera.offset.y
             self.dog.update(self.player_group)
             self.dog2.update(self.player_group)
-
+            
             self.all_sprites.draw(self.screen)
+
+    #     canvas.blit(house, (0 - camera.offset.x, 0 - camera.offset.y))
+    # canvas.blit(cat.current_image,(cat.rect.x - camera.offset.x, cat.rect.y - camera.offset.y))
 
             # See if shots hit the aliens.
             for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 1, 0).keys():
@@ -89,6 +111,8 @@ class Game():
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)
+            self.camera.scroll()
+            self.window.blit(self.screen, (0,0))
             pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
             pygame.display.update()
 

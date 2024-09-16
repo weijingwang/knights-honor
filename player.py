@@ -4,6 +4,7 @@ class PlayerClass(pygame.sprite.Sprite):
     """player"""
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
+        self.left_border, self.right_border = 250, 1150
         self.direction = "right"
         self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
         self.image_right = pygame.image.load("assets/images/KH_BG_1-4.png").convert_alpha()
@@ -15,6 +16,7 @@ class PlayerClass(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.width -= 137
         self.rect.topleft = (self.x, self.y)
+        self.ground_y = 224
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
     def update(self, enemy_group):
