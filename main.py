@@ -2,13 +2,14 @@ import pygame
 from player import PlayerClass
 from enemy import Enemy
 
-     
-
 class Game():
     """basic game"""
     def __init__(self):
         pygame.mixer.pre_init()
         pygame.init()
+        self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
+        self.bark.set_volume(0.3)
+
         self.FPS = 60
         # pygame.display.set_caption("knight's honor (pygame 38)")
         self.key = pygame.key.get_pressed()
@@ -30,15 +31,20 @@ class Game():
         pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
-        self.dog = Enemy()
+        self.dog = Enemy(752)
+        self.dog2 = Enemy(-300)
         self.all_sprites = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
 
         self.player_group.add(self.player)
         self.enemy_group.add(self.dog)
+        self.enemy_group.add(self.dog2)
+
         self.all_sprites.add(self.player)
         self.all_sprites.add(self.dog)
+        self.all_sprites.add(self.dog2)
+
 
 
 
@@ -70,7 +76,16 @@ class Game():
             self.screen.blit(self.bg3, (0,0))
             self.player.update(self.enemy_group)
             self.dog.update(self.player_group)
+            self.dog2.update(self.player_group)
+
             self.all_sprites.draw(self.screen)
+
+            # See if shots hit the aliens.
+            for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 1, 0).keys():
+                if pygame.mixer and self.bark is not None:
+                    self.bark.play()
+                print("collide")
+
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)
