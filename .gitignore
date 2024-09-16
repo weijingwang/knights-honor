@@ -2,3 +2,5 @@
 /.venv
 .DS_Store
 __pycache__/combatGame.cpython-312.pyc
+__pycache__/enemy.cpython-312.pyc
+__pycache__/player.cpython-312.pyc

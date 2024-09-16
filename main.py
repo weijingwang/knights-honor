@@ -1,21 +1,6 @@
 import pygame
-
-class PlayerClass(pygame.sprite.Sprite):
-    """player"""
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-
-        self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
-        self.img = pygame.image.load("assets/images/KH_BG_1-4.png").convert_alpha()
-        self.attack = False
-        self.x = 0
-    def draw(self, screen):
-        screen.blit(self.img, (self.x,0))
-    def update(self):
-        
-         if self.K_LEFT: self.x -= 5
-         if self.K_RIGHT: self.x += 5
-
+from player import PlayerClass
+from enemy import Enemy
 
      
 
@@ -45,6 +30,17 @@ class Game():
         pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
+        self.dog = Enemy()
+        self.all_sprites = pygame.sprite.Group()
+        self.player_group = pygame.sprite.Group()
+        self.enemy_group = pygame.sprite.Group()
+
+        self.player_group.add(self.player)
+        self.enemy_group.add(self.dog)
+        self.all_sprites.add(self.player)
+        self.all_sprites.add(self.dog)
+
+
 
 
         
@@ -72,13 +68,15 @@ class Game():
             self.screen.blit(self.bg1, (0,0))
             self.screen.blit(self.bg2, (0,0))
             self.screen.blit(self.bg3, (0,0))
-            self.player.update()
-            self.player.draw(self.screen)
-            print(self.player.x)
+            self.player.update(self.enemy_group)
+            self.dog.update(self.player_group)
+            self.all_sprites.draw(self.screen)
+
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)
             pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
             pygame.display.update()
+            print(self.player.rect.x)
 
 
 
