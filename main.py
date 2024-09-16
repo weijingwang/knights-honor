@@ -1,45 +1,84 @@
 import pygame
 
+class PlayerClass(pygame.sprite.Sprite):
+    """player"""
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
+        self.img = pygame.image.load("assets/images/KH_BG_1-4.png").convert_alpha()
+        self.attack = False
+        self.x = 0
+    def draw(self, screen):
+        screen.blit(self.img, (self.x,0))
+    def update(self):
+        
+         if self.K_LEFT: self.x -= 5
+         if self.K_RIGHT: self.x += 5
+
+
+     
 
 class Game():
     """basic game"""
     def __init__(self):
         pygame.mixer.pre_init()
         pygame.init()
-        pygame.display.set_caption("knight's honor (pygame 38)")
+        self.FPS = 60
+        # pygame.display.set_caption("knight's honor (pygame 38)")
+        self.key = pygame.key.get_pressed()
         self.clock = pygame.time.Clock()
-        self.DISPLAY_W = 1280
-        self.DISPLAY_H = 720
+        self.DISPLAY_W, self.DISPLAY_H = 1280, 720
+        self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
+
         self.screen = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
         self.done = False
+
+        self.font = pygame.font.get_default_font()
 
         self.bg1 = pygame.image.load("assets/images/KH_BG_1-1.png").convert_alpha()
         self.bg2 = pygame.image.load("assets/images/KH_BG_1-2.png").convert_alpha()
         self.bg3 = pygame.image.load("assets/images/KH_BG_1-3.png").convert_alpha()
-        self.bg4 = pygame.image.load("assets/images/KH_BG_1-4.png").convert_alpha()
 
         pygame.mixer.music.load("assets/music/colyon-clip.ogg")
         pygame.mixer.music.play(-1,0.0)
         pygame.mixer.music.set_volume(0.5)
 
+        self.player = PlayerClass()
+
+
         
 
     def check_events(self):
+        self.player.K_LEFT = pygame.key.get_pressed()[pygame.K_LEFT]
+        self.player.K_RIGHT = pygame.key.get_pressed()[pygame.K_RIGHT]
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                        self.done = True
+                # if event.type == pygame.KEYDOWN:
+                #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
+                #     if event.key == pygame.K_LEFT: self.K_LEFT = True
+                #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
+                #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
+                #     if event.key == pygame.K_UP: self.UP_KEY = True
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_SPACE: self.player.attack = True
+                #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
+                #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
+                #     if event.key == pygame.K_UP: self.UP_KEY = True
     def game_loop(self):
         while not self.done:
             self.check_events()
             self.screen.blit(self.bg1, (0,0))
             self.screen.blit(self.bg2, (0,0))
             self.screen.blit(self.bg3, (0,0))
-            self.screen.blit(self.bg4, (0,0))
-
-
+            self.player.update()
+            self.player.draw(self.screen)
+            print(self.player.x)
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
-            self.screen.blit
-            pygame.display.flip()
+            self.clock.tick(self.FPS)
+            pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
+            pygame.display.update()
 
 
 
