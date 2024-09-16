@@ -7,6 +7,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
+        self.bark.set_volume(0.3)
         self.bark_channel = pygame.mixer.Channel(0)
         self.x = 752
         self.y = 446
@@ -23,6 +24,7 @@ class Enemy(pygame.sprite.Sprite):
         if collided_player:
             print("collided player")
             if not self.bark_channel.get_busy():
-                self.bark.play()
+                self.bark_channel.play(self.bark)
+
         if self.K_LEFT: self.x -= 5
         if self.K_RIGHT: self.x += 5
