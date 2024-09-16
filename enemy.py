@@ -22,7 +22,11 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, player_group):
         collided_player = pygame.sprite.spritecollideany(self, player_group)
         if collided_player:
-            print("collided player")
+            self.bark.play()
+            
+            self.kill()
+            print(self.rect)
+            # print("collided player")
             if not self.bark_channel.get_busy():
                 self.bark_channel.play(self.bark)
 

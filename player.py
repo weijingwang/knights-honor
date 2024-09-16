@@ -19,7 +19,9 @@ class PlayerClass(pygame.sprite.Sprite):
         screen.blit(self.image, (self.x, self.y))
     def update(self, enemy_group):
         collided_enemy = pygame.sprite.spritecollideany(self, enemy_group)
-        if collided_enemy: print("collided_enemy")
+        if collided_enemy:
+            pass
+            # print("collided_enemy")
         if self.K_LEFT:
             self.rect.x -= 5
             if self.direction == "right":
@@ -31,5 +33,7 @@ class PlayerClass(pygame.sprite.Sprite):
             if self.direction == "left":
                 self.direction = "right"
                 self.image = self.image_right
+
+
 
 

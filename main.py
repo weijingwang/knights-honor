@@ -76,7 +76,6 @@ class Game():
             self.clock.tick(self.FPS)
             pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
             pygame.display.update()
-            print(self.player.rect.x)
 
 
 
