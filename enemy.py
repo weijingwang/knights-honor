@@ -1,5 +1,8 @@
 import pygame
-
+FOLLOW_SPEED = 1
+GRAVITY = 0.2
+SCREEN_HEIGHT = 720
+JUMP_STRENGTH = -3.4
 # dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
 
 class Enemy(pygame.sprite.Sprite):
@@ -12,13 +15,32 @@ class Enemy(pygame.sprite.Sprite):
         self.x = x
         self.y = 446
         self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
-        self.image = pygame.image.load("assets/images/KH_BG_1-8.png").convert_alpha()
+        self.image_R = pygame.image.load("assets/images/KH_BG_1-8.png").convert_alpha()
+        self.image_L = pygame.transform.flip(self.image_R, True, False)
+        self.image = self.image_R
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
         self.attack = False
+
+        self.jump_velocity = JUMP_STRENGTH
+        self.is_jumping = False
+        self.facing_right = True
+
         
     def draw(self, screen):
         screen.blit(self.image, (self.x,0))
+
+    def jump(self):
+        if self.is_jumping:
+            self.rect.y += self.jump_velocity
+            self.jump_velocity += GRAVITY
+            if self.rect.y >= SCREEN_HEIGHT - self.rect.height - 100:
+                self.rect.y = SCREEN_HEIGHT - self.rect.height - 100
+                # print("asdf")
+                self.is_jumping = False
+        if not self.is_jumping:
+            self.is_jumping = True
+            self.jump_velocity = JUMP_STRENGTH
 
 
     def follow_player(self, player):
@@ -27,19 +49,30 @@ class Enemy(pygame.sprite.Sprite):
         
         # Calculate direction vector (target - enemy)
         direction = target_pos - my_pos
-        
+        # what way is it moving?
+        if direction.x > 0:
+            self.facing_right = False
+        else:
+            self.facing_right = True
+
+        # print(direction)
         # Normalize direction to get unit vector (length 1)
         if direction.length() > 0:
             direction = direction.normalize()
 
         # Move enemy in the direction of the target
-        my_pos += direction * 1
+        my_pos += direction * FOLLOW_SPEED
 
         # Update enemy's position
         self.rect.x, self.rect.y = my_pos.x, my_pos.y
 
 
     def update(self, player_group):
+        if self.facing_right:
+            self.image = self.image_R
+        else:
+            self.image = self.image_L
+        self.jump()
         self.x = self.rect.x
         self.y = self.rect.y
 

@@ -30,9 +30,9 @@ class Game():
         self.bg2 = pygame.image.load("assets/images/KH_BG_1-2.png").convert_alpha()
         self.bg3 = pygame.image.load("assets/images/KH_BG_1-3.png").convert_alpha()
 
-        # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
-        # pygame.mixer.music.play(-1,0.0)
-        # pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
+        pygame.mixer.music.play(-1,0.0)
+        pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
         self.dog = Enemy(752)
