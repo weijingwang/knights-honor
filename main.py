@@ -30,9 +30,9 @@ class Game():
         self.bg2 = pygame.image.load("assets/images/KH_BG_1-2.png").convert_alpha()
         self.bg3 = pygame.image.load("assets/images/KH_BG_1-3.png").convert_alpha()
 
-        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
-        pygame.mixer.music.play(-1,0.0)
-        pygame.mixer.music.set_volume(0.5)
+        # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
+        # pygame.mixer.music.play(-1,0.0)
+        # pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
         self.dog = Enemy(752)
@@ -95,7 +95,7 @@ class Game():
                 enemy.rect.x  -= self.camera.offset.x
                 enemy.rect.y -= self.camera.offset.y
 
-            self.enemy_group.update(self.player_group)
+            self.enemy_group.update(self.player_group) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
             
 
 

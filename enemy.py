@@ -19,12 +19,35 @@ class Enemy(pygame.sprite.Sprite):
         
     def draw(self, screen):
         screen.blit(self.image, (self.x,0))
+
+
+    def follow_player(self, player):
+        my_pos = pygame.math.Vector2(self.rect.x, self.rect.y)
+        target_pos = pygame.math.Vector2(player.rect.center)
         
+        # Calculate direction vector (target - enemy)
+        direction = target_pos - my_pos
+        
+        # Normalize direction to get unit vector (length 1)
+        if direction.length() > 0:
+            direction = direction.normalize()
+
+        # Move enemy in the direction of the target
+        my_pos += direction * 1
+
+        # Update enemy's position
+        self.rect.x, self.rect.y = my_pos.x, my_pos.y
+
+
     def update(self, player_group):
         self.x = self.rect.x
         self.y = self.rect.y
-        self.rect.x+=1
-        print("alive")
+
+        for player in player_group:
+           self.follow_player(player)
+
+        # self.rect.x+=1
+        # print(self.rect.x)
         
         # collided_player = pygame.sprite.spritecollideany(self, player_group)
         # if collided_player:
