@@ -103,11 +103,13 @@ class Game():
     # canvas.blit(cat.current_image,(cat.rect.x - camera.offset.x, cat.rect.y - camera.offset.y))
 
             # See if shots hit the aliens.
-            for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 1, 0).keys():
+            for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 0, 0).keys():
                 if pygame.mixer and self.bark is not None:
                     self.bark.play()
-                    enemy.kill()
-                print("collide")
+                    enemy.knockbacked = True
+                    if enemy.lives <= 0:
+                        enemy.kill()
+                        print("collide")
 
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))

@@ -3,11 +3,14 @@ FOLLOW_SPEED = 1
 GRAVITY = 0.2
 SCREEN_HEIGHT = 720
 JUMP_STRENGTH = -3.4
+KNOCKBACK_DIST = 200
 # dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
 
 class Enemy(pygame.sprite.Sprite):
     """player"""
     def __init__(self, x):
+        self.lives = 3 - 1
+        self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
         self.bark.set_volume(0.3)
@@ -29,6 +32,16 @@ class Enemy(pygame.sprite.Sprite):
         
     def draw(self, screen):
         screen.blit(self.image, (self.x,0))
+
+    def knockback(self):
+        if self.facing_right:
+            self.rect.x += KNOCKBACK_DIST
+        else:
+            self.rect.x -= KNOCKBACK_DIST
+        self.lives -= 1
+        self.knockbacked = False
+
+            
 
     def jump(self):
         if self.is_jumping:
@@ -68,16 +81,19 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self, player_group):
-        if self.facing_right:
-            self.image = self.image_R
-        else:
-            self.image = self.image_L
-        self.jump()
-        self.x = self.rect.x
-        self.y = self.rect.y
+        if not self.knockbacked:
+            if self.facing_right:
+                self.image = self.image_R
+            else:
+                self.image = self.image_L
+            self.jump()
+            self.x = self.rect.x
+            self.y = self.rect.y
 
-        for player in player_group:
-           self.follow_player(player)
+            for player in player_group:
+                self.follow_player(player)
+        else:
+            self.knockback()
 
         # self.rect.x+=1
         # print(self.rect.x)
