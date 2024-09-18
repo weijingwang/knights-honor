@@ -43,16 +43,14 @@ class Game():
         pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
-        self.dog = Enemy(752)
-        self.dog2 = Enemy(-300)
+
         self.all_sprites = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
         self.background_group = pygame.sprite.Group()
 
         self.player_group.add(self.player)
-        self.enemy_group.add(self.dog)
-        self.enemy_group.add(self.dog2)
+
 
         self.background_group.add(self.bg1)
         self.background_group.add(self.bg2)
@@ -66,6 +64,12 @@ class Game():
         self.camera = Camera(self.player)
 
         self.HP_color = 'green'
+
+        self.spawn_timer = 1 * self.FPS
+        self.spawn_timer_store = self.spawn_timer
+        self.max_spawn = 3
+
+        self.spawn_location = 0
 
 
 
@@ -98,8 +102,29 @@ class Game():
             #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
             #     if event.key == pygame.K_UP: self.UP_KEY = True
 
-    # def spawn_enemies(self):
-         
+    def spawn_enemies(self):
+        print(self.spawn_location)
+        if self.wait_time_done() and len(self.enemy_group) < self.max_spawn:
+            if self.spawn_location:
+                dogx = random.randrange(-500,-100)
+            else:
+                dogx = random.randrange(1380,1600)
+
+            dog = Enemy(dogx)
+            self.enemy_group.add(dog)
+            print("enemy spawned at", dogx)
+            self.spawn_location = not self.spawn_location
+
+
+
+    def wait_time_done(self):
+        self.spawn_timer -= 1
+        if self.spawn_timer <= 0:
+            self.spawn_timer= self.spawn_timer_store
+            return True
+        else:
+            return False
+        
     def draw_HP_bar(self):
         if self.player.HP <= TOTAL_LIVES/4:
             self.HP_color = "red"
@@ -116,7 +141,7 @@ class Game():
 
     def game_loop(self):
         while not self.done:
-
+            self.spawn_enemies()
             self.screen.fill((0,0,0))
             self.check_events()
 

@@ -28,7 +28,6 @@ class Background(pygame.sprite.Sprite):
             self.mostLefted = True
         else:
             self.mostLefted = False
-        print(self.mostLefted, self.mostRighted) 
         if self.rect.right <= 1280:
             self.mostRighted = True
         else:
