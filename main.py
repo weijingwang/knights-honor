@@ -2,7 +2,7 @@ import pygame
 import random
 from player import PlayerClass
 from enemy import Enemy
-from camera import Camera
+from camera import *
 
 class Game():
     """basic game"""
@@ -29,10 +29,10 @@ class Game():
 
         self.font = pygame.font.get_default_font()
 
-        self.bg1 = pygame.image.load("assets/images/KH_BG_1-1.png").convert_alpha()
-        self.bg2 = pygame.image.load("assets/images/KH_BG_1-2.png").convert_alpha()
-        self.bg3 = pygame.image.load("assets/images/KH_BG_1-3.png").convert_alpha()
-
+        self.bg1 = Background("assets/images/KH_BG_1-1.png")
+        self.bg2 = Background("assets/images/KH_BG_1-2.png")
+        self.bg3 = Background("assets/images/KH_BG_1-3.png")
+        
         # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
         # pygame.mixer.music.play(-1,0.0)
         # pygame.mixer.music.set_volume(0.5)
@@ -43,10 +43,16 @@ class Game():
         self.all_sprites = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
+        self.background_group = pygame.sprite.Group()
 
         self.player_group.add(self.player)
         self.enemy_group.add(self.dog)
         self.enemy_group.add(self.dog2)
+
+        self.background_group.add(self.bg1)
+        self.background_group.add(self.bg2)
+        self.background_group.add(self.bg3)
+
 
         # self.all_sprites.add(self.player)
         # self.all_sprites.add(self.dog)
@@ -92,11 +98,8 @@ class Game():
             self.screen.fill((0,0,0))
             self.check_events()
 
-            self.bgx -= self.camera.offset.x
-            self.bgy -= self.camera.offset.y
-            self.screen.blit(self.bg1, (self.bgx, self.bgy))
-            self.screen.blit(self.bg2, (self.bgx, self.bgy))
-            self.screen.blit(self.bg3, (self.bgx, self.bgy))
+            self.background_group.draw(self.screen)
+            self.background_group.update(self.camera.offset.x, self.camera.offset.y)
             
             self.player.rect.x = self.player.rect.x - self.camera.offset.x
             self.player.rect.y = self.player.rect.y - self.camera.offset.y

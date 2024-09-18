@@ -10,7 +10,7 @@ class PlayerClass(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.attacking = False
-        self.attack_timer = 1 * FPS
+        self.attack_timer = 0.2 * FPS
         self.attack_timer_store = self.attack_timer
 
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")

@@ -4,6 +4,18 @@ vec = pygame.math.Vector2
 LEFT_BOUND = 0
 RIGHT_BOUND = 1280
 
+class Background(pygame.sprite.Sprite):
+    """background"""
+    def __init__(self, image):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image).convert_alpha()
+        self.rect = self.image.get_rect()
+    def draw(self, screen):
+        screen.blit(self.image, (self.x, self.y))
+    def update(self, camera_offset_x, camera_offset_y):
+        self.rect.x -= camera_offset_x
+        self.rect.y -= camera_offset_y
+
 class Camera:
     def __init__(self, player):
         self.player = player
