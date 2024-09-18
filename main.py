@@ -34,8 +34,8 @@ class Game():
 
         self.font = pygame.font.get_default_font()
 
-        # self.bg1 = Background("assets/images/KH_BG_1-1.png")
-        # self.bg2 = Background("assets/images/KH_BG_1-2.png")
+        self.bg1 = Background("assets/images/KH_BG_1-1.png")
+        self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
         
         pygame.mixer.music.load("assets/music/colyon-clip.ogg")
@@ -54,8 +54,8 @@ class Game():
         self.enemy_group.add(self.dog)
         self.enemy_group.add(self.dog2)
 
-        # self.background_group.add(self.bg1)
-        # self.background_group.add(self.bg2)
+        self.background_group.add(self.bg1)
+        self.background_group.add(self.bg2)
         self.background_group.add(self.bg3)
 
 
@@ -64,9 +64,6 @@ class Game():
         # self.all_sprites.add(self.dog2)
 
         self.camera = Camera(self.player)
-
-        self.bgx=0
-        self.bgy=0
 
         self.HP_color = 'green'
 
@@ -182,68 +179,3 @@ class Game():
 
 g = Game()
 g.game_loop()
-
-"""
-import pygame
-
-class Game():
-
-    def __init__(self):
-        pygame.init()
-        self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = 1280, 720
-        self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
-        self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
-        self.font = pygame.font.get_default_font()
-        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
-        # self.main_menu = mainMenu(self)
-        # self.options = infoMenu(self)
-        # self.combatGame = combatGame(self)
-        # self.state = self.combatGame
-
-    def check_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running, self.playing = False, False
-                self.state.run_display = False
-                pygame.quit()
-                quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    self.START_KEY = True
-                if event.key == pygame.K_BACKSPACE:
-                    self.BACK_KEY = True
-                if event.key == pygame.K_DOWN:
-                    self.DOWN_KEY = True
-                if event.key == pygame.K_UP:
-                    self.UP_KEY = True
-
-    def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-
-    def draw_text(self, text, size, x, y ):
-        font = pygame.font.Font(self.font_name,size)
-        text_surface = font.render(text, True, self.WHITE).convert_alpha()
-        text_rect = text_surface.get_rect()
-        text_rect.center = (x,y)
-        self.display.blit(text_surface,text_rect)
-
-    def game_loop(self):
-        while self.playing:
-            self.check_events()
-            if self.START_KEY:
-                self.playing= False
-            self.display.fill(self.BLACK)
-            self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
-
-            pygame.display.update()
-            self.reset_keys()
-
-g = Game()
-
-while g.running:
-    # g.state.run()
-    g.game_loop()
-
-    """

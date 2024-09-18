@@ -28,7 +28,12 @@ class Background(pygame.sprite.Sprite):
             self.mostLefted = True
         else:
             self.mostLefted = False
-            
+        print(self.mostLefted, self.mostRighted) 
+        if self.rect.right <= 1280:
+            self.mostRighted = True
+        else:
+            self.mostRighted = False
+        # print(self.rect.right, self.mostRighted) 
         # elif self.rect.right <= 1280:
         #     self.mostRighted = True
         
@@ -40,12 +45,15 @@ class Camera:
         self.DISPLAY_W, self.DISPLAY_H = 1280, 720
         self.CONST = vec(-self.DISPLAY_W / 2 + player.rect.w / 2, -self.player.ground_y + 20)
     def scroll(self, mostRighted, mostLefted):
-        
         self.offset_float.x += (self.player.rect.x - self.offset_float.x + self.CONST.x)
-        self.offset_float.y += (self.player.rect.y - self.offset_float.y + self.CONST.y)
+        # self.offset_float.y += (self.player.y - self.offset_float.y + self.CONST.y)
         self.offset.x, self.offset.y = int(self.offset_float.x), int(self.offset_float.y)
         if mostLefted:
-            self.offset.x, self.offset.y = 0,0
+            if self.offset.x <0:
+                self.offset.x = 0
+        if mostRighted:
+            if self.offset.x >0:
+                self.offset.x = 0
 
         # print(self.player.rect.x, self.offset.x)
         # self.offset.x = min(self.offset.x, LEFT_BOUND)
