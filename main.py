@@ -18,7 +18,7 @@ class Game():
         self.bark.set_volume(0.3)
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
         self.slash.set_volume(0.6)
-        self.oof.set_volume(0.8)
+        self.oof.set_volume(0.6)
 
         self.FPS = 60
         # pygame.display.set_caption("knight's honor (pygame 38)")
@@ -40,7 +40,7 @@ class Game():
         
         pygame.mixer.music.load("assets/music/colyon-clip.ogg")
         pygame.mixer.music.play(-1,0.0)
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(0.7)
 
         self.player = PlayerClass()
 
@@ -103,12 +103,11 @@ class Game():
             #     if event.key == pygame.K_UP: self.UP_KEY = True
 
     def spawn_enemies(self):
-        print(self.spawn_location)
         if self.wait_time_done() and len(self.enemy_group) < self.max_spawn:
             if self.spawn_location:
                 dogx = random.randrange(-500,-100)
             else:
-                dogx = random.randrange(1380,1600)
+                dogx = random.randrange(1280*2,1280*2+300)
 
             dog = Enemy(dogx)
             self.enemy_group.add(dog)
@@ -157,7 +156,7 @@ class Game():
                 enemy.rect.x  -= self.camera.offset.x
                 enemy.rect.y -= self.camera.offset.y
 
-            self.enemy_group.update(self.player_group, self.screen) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
+            self.enemy_group.update(self.player_group, self.bg3.rect, (self.camera.offset.x, self.camera.offset.y), self.screen) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
             
 
 

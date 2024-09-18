@@ -38,7 +38,7 @@ class PlayerClass(pygame.sprite.Sprite):
 
         self.image = self.image_right
 
-        self.x = 206
+        self.x = 1280/2
         self.y = 256
         self.rect = self.image.get_rect()
         self.rect.width -= 0 # try perfect collison using masks later

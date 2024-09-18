@@ -7,6 +7,7 @@ KNOCKBACK_DIST = 200
 FPS = 60
 ENEMY_ATTACK_TIME = 0.5
 
+
 # dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
 
 class Enemy(pygame.sprite.Sprite):
@@ -61,7 +62,7 @@ class Enemy(pygame.sprite.Sprite):
             self.is_jumping = True
             self.jump_velocity = JUMP_STRENGTH
 
-        print(self.time_seg1)
+        # print(self.time_seg1)
 
         
 
@@ -90,8 +91,8 @@ class Enemy(pygame.sprite.Sprite):
             self.jump_velocity = JUMP_STRENGTH
 
 
-    def follow_player(self, player):
-        my_pos = pygame.math.Vector2(self.rect.x, self.rect.y)
+    def follow_player(self, player, camera):
+        my_pos = pygame.math.Vector2(self.rect.center)
         target_pos = pygame.math.Vector2(player.rect.center)
         
         # Calculate direction vector (target - enemy)
@@ -108,15 +109,18 @@ class Enemy(pygame.sprite.Sprite):
             direction = direction.normalize()
 
         # Move enemy in the direction of the target
-        my_pos += direction * FOLLOW_SPEED
+        if self.rect.center[0] < 0 - camera[0] or self.rect.center[0] > 1280*2 + camera[0]:
+            my_pos += direction * FOLLOW_SPEED * 3
+        else:
+            my_pos += direction * FOLLOW_SPEED 
 
         # Update enemy's position
-        self.rect.x, self.rect.y = my_pos.x, my_pos.y
+        self.rect.center = (my_pos.x, my_pos.y)
 
 
-    def update(self, player_group, screen):
+    def update(self, player_group, background_rect, camera, screen):
 
-
+        print(self.x)
 
         if not self.knockbacked:
             if self.facing_right:
@@ -128,24 +132,16 @@ class Enemy(pygame.sprite.Sprite):
             self.y = self.rect.y
 
             for player in player_group:
-                self.follow_player(player)
+                self.follow_player(player, camera)
         else:
             self.knockback()
+        # if self.rect.left < background_rect.left:
+        #     self.rect.left = background_rect.left
+        # if self.rect.right > background_rect.right:
+        #     self.rect.right = background_rect.right
 
-        # self.rect.x+=1
-        # print(self.rect.x)
-        
-        # collided_player = pygame.sprite.spritecollideany(self, player_group)
-        # if collided_player:
-        #     self.bark.play()
-            
-        #     self.kill()
-        #     print(self.rect)
-        #     # print("collided player")
-        #     if not self.bark_channel.get_busy():
-        #         self.bark_channel.play(self.bark)
 
-        if self.K_LEFT: self.x -= 5
-        if self.K_RIGHT: self.x += 5
 
-        pygame.draw.rect(screen, 'green', pygame.Rect(self.rect.x, self.rect.y-self.rect.width/8, self.rect.width/self.TOTALLIVES*self.lives, 5))
+
+
+        pygame.draw.rect(screen, 'green', pygame.Rect(self.rect.x, self.rect.top+self.rect.width/40, self.rect.width/self.TOTALLIVES*self.lives, 5))
