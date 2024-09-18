@@ -108,13 +108,13 @@ class PlayerClass(pygame.sprite.Sprite):
 
 
 
-        if self.K_LEFT and self.rect.left >= SCREEN_LEFT_BOUNDx:
+        if (self.K_LEFT or self.K_a) and self.rect.left >= SCREEN_LEFT_BOUNDx:
             self.rect.x -= 5
             if self.direction == "right":
                 self.direction = "left"
                 self.image = self.image_left
 
-        if self.K_RIGHT and self.rect.right <= SCREEN_RIGHT_BOUNDx:
+        if (self.K_RIGHT or self.K_d) and self.rect.right <= SCREEN_RIGHT_BOUNDx:
             self.rect.x += 5
             if self.direction == "left":
                 self.direction = "right"

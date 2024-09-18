@@ -76,26 +76,30 @@ class Game():
 
     def check_events(self):
         self.player.K_LEFT = pygame.key.get_pressed()[pygame.K_LEFT]
+        self.player.K_a = pygame.key.get_pressed()[pygame.K_a]
         self.player.K_RIGHT = pygame.key.get_pressed()[pygame.K_RIGHT]
+        self.player.K_d = pygame.key.get_pressed()[pygame.K_d]
         for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                       self.done = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE: 
-                        self.slash.play()
-                        self.player.attacking = True
-                    if event.key == pygame.K_UP: self.player.is_jumping = True
-            
-                #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
-                #     if event.key == pygame.K_LEFT: self.K_LEFT = True
-                #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
-                #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
-                #     if event.key == pygame.K_UP: self.UP_KEY = True
-                if event.type == pygame.KEYUP:
-                    pass
-                    # if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
-                #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
-                #     if event.key == pygame.K_UP: self.UP_KEY = True
+            if event.type == pygame.QUIT:
+                    self.done = True
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     self.slash.play()
+            #     self.player.attacking = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP or event.key == pygame.K_w: self.player.is_jumping = True
+                if event.key == pygame.K_SPACE:
+                    self.slash.play()
+                    self.player.attacking = True
+            #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
+            #     if event.key == pygame.K_LEFT: self.K_LEFT = True
+            #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
+            #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
+            #     if event.key == pygame.K_UP: self.UP_KEY = True
+            if event.type == pygame.KEYUP:
+                pass
+                # if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
+            #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
+            #     if event.key == pygame.K_UP: self.UP_KEY = True
 
     # def spawn_enemies(self):
          
