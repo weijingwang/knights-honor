@@ -109,8 +109,9 @@ class Enemy(pygame.sprite.Sprite):
             direction = direction.normalize()
 
         # Move enemy in the direction of the target
-        if self.rect.center[0] < 0 - camera[0] or self.rect.center[0] > 1280*2 + camera[0]:
-            my_pos += direction * FOLLOW_SPEED * 3
+        if self.rect.center[0] < 0 - camera.x - 1280/2 or self.rect.center[0] > 1280*2 -camera.x - 1280/2 + 2*self.rect.width:
+            my_pos += direction * FOLLOW_SPEED * 20
+            # print('fast')
         else:
             my_pos += direction * FOLLOW_SPEED 
 
@@ -120,7 +121,8 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self, player_group, background_rect, camera, screen):
 
-        print(self.x)
+        # print(self.x)
+        # print(camera)
 
         if not self.knockbacked:
             if self.facing_right:
@@ -135,6 +137,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.follow_player(player, camera)
         else:
             self.knockback()
+
         # if self.rect.left < background_rect.left:
         #     self.rect.left = background_rect.left
         # if self.rect.right > background_rect.right:

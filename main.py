@@ -6,6 +6,8 @@ from camera import *
 TOTAL_LIVES = 10
 HP_WIDTH = 600
 
+"dog cry from : https://freesound.org/people/jocelynlopez/sounds/635114/"
+
 class Game():
     """basic game"""
     def __init__(self):
@@ -14,7 +16,8 @@ class Game():
         pygame.init()
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
-
+        self.dogcry = pygame.mixer.Sound("assets/se/dogcry-clip.ogg")
+        self.dogcry.set_volume(0.5)
         self.bark.set_volume(0.3)
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
         self.slash.set_volume(0.6)
@@ -108,6 +111,7 @@ class Game():
                 dogx = random.randrange(-500,-100)
             else:
                 dogx = random.randrange(1280*2,1280*2+300)
+            dogx = dogx  - self.camera.camera_offset_tracker.x # - 1280/2
 
             dog = Enemy(dogx)
             self.enemy_group.add(dog)
@@ -156,7 +160,7 @@ class Game():
                 enemy.rect.x  -= self.camera.offset.x
                 enemy.rect.y -= self.camera.offset.y
 
-            self.enemy_group.update(self.player_group, self.bg3.rect, (self.camera.offset.x, self.camera.offset.y), self.screen) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
+            self.enemy_group.update(self.player_group, self.bg3.rect, self.camera.camera_offset_tracker, self.screen) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
             
 
 
@@ -173,15 +177,16 @@ class Game():
 
                 
                 if pygame.mixer and self.bark is not None and self.player.attacking:
-                    
-                    self.bark.play()
                     self.player.attack = False
                     self.player.image = self.player.image_left
                     enemy.knockbacked = True
                     enemy.lives -= 1*self.player.crit_multiplier
                     if enemy.lives <= 1:
+                        self.dogcry.play()
                         enemy.kill()
                         print("collide")
+                    else:
+                        self.bark.play()
 
             # if self.player.HP <= 0:
             #     quit()

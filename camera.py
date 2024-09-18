@@ -43,6 +43,7 @@ class Camera:
         self.offset_float = vec(0, 0)
         self.DISPLAY_W, self.DISPLAY_H = 1280, 720
         self.CONST = vec(-self.DISPLAY_W / 2 + player.rect.w / 2, -self.player.ground_y + 20)
+        self.camera_offset_tracker = vec(0, 0)
     def scroll(self, mostRighted, mostLefted):
         self.offset_float.x += (self.player.rect.x - self.offset_float.x + self.CONST.x)
         # self.offset_float.y += (self.player.y - self.offset_float.y + self.CONST.y)
@@ -53,6 +54,10 @@ class Camera:
         if mostRighted:
             if self.offset.x >0:
                 self.offset.x = 0
+        self.camera_offset_tracker.x += self.offset.x
+        self.camera_offset_tracker.y += self.offset.y
+        # print(self.camera_offset_tracker.x, self.camera_offset_tracker.y)
+
 
         # print(self.player.rect.x, self.offset.x)
         # self.offset.x = min(self.offset.x, LEFT_BOUND)
