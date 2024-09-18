@@ -49,10 +49,10 @@ class Enemy(pygame.sprite.Sprite):
 
     def attack_movement(self):
         if self.is_jumping:
-            self.rect.x += self.jump_velocity
+            self.rect.y += self.jump_velocity
             self.jump_velocity += GRAVITY
-            if self.rect.x >= SCREEN_HEIGHT - self.rect.height - 100:
-                self.rect.x = SCREEN_HEIGHT - self.rect.height - 100
+            if self.rect.y >= SCREEN_HEIGHT - self.rect.height - 100:
+                self.rect.y = SCREEN_HEIGHT - self.rect.height - 100
                 # print("asdf")
                 self.is_jumping = False
         if not self.is_jumping:
@@ -114,9 +114,6 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self, player_group):
-
-
-
 
         if not self.knockbacked:
             if self.facing_right:

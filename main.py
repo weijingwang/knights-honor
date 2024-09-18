@@ -14,7 +14,7 @@ class Game():
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
 
         self.bark.set_volume(0.3)
-
+        self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
         self.FPS = 60
         # pygame.display.set_caption("knight's honor (pygame 38)")
         self.key = pygame.key.get_pressed()
@@ -68,8 +68,10 @@ class Game():
                 if event.type == pygame.QUIT:
                        self.done = True
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE: self.player.attack = True
-
+                    if event.key == pygame.K_SPACE: 
+                        self.slash.play()
+                        self.player.attacking = True
+            
                 #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
                 #     if event.key == pygame.K_LEFT: self.K_LEFT = True
                 #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
@@ -86,6 +88,7 @@ class Game():
 
     def game_loop(self):
         while not self.done:
+
             self.screen.fill((0,0,0))
             self.check_events()
 
@@ -113,14 +116,14 @@ class Game():
             # print(self.player.attack)
             # See if shots hit the aliens.
             for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 0, 0).keys():
-
+                
                 if enemy.wait_time_done():
                     enemy.attack_movement()
                     enemy.oof.play()
 
 
                 self.player.HP -= 1
-                if pygame.mixer and self.bark is not None and self.player.attack:
+                if pygame.mixer and self.bark is not None and self.player.attacking:
                     
                     self.bark.play()
                     self.player.attack = False
