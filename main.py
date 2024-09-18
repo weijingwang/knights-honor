@@ -11,6 +11,8 @@ class Game():
         pygame.mixer.pre_init()
         pygame.init()
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
+        self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
+
         self.bark.set_volume(0.3)
 
         self.FPS = 60
@@ -31,9 +33,9 @@ class Game():
         self.bg2 = pygame.image.load("assets/images/KH_BG_1-2.png").convert_alpha()
         self.bg3 = pygame.image.load("assets/images/KH_BG_1-3.png").convert_alpha()
 
-        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
-        pygame.mixer.music.play(-1,0.0)
-        pygame.mixer.music.set_volume(0.5)
+        # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
+        # pygame.mixer.music.play(-1,0.0)
+        # pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
         self.dog = Enemy(752)
@@ -65,15 +67,17 @@ class Game():
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                        self.done = True
-                # if event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE: self.player.attack = True
+
                 #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
                 #     if event.key == pygame.K_LEFT: self.K_LEFT = True
                 #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
                 #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
                 #     if event.key == pygame.K_UP: self.UP_KEY = True
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_SPACE: self.player.attack = True
-                #     if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
+                    pass
+                    # if event.key == pygame.K_BACKSPACE: self.BACK_KEY = True
                 #     if event.key == pygame.K_DOWN: self.DOWN_KEY = True
                 #     if event.key == pygame.K_UP: self.UP_KEY = True
 
@@ -106,16 +110,29 @@ class Game():
 
     #     canvas.blit(house, (0 - camera.offset.x, 0 - camera.offset.y))
     # canvas.blit(cat.current_image,(cat.rect.x - camera.offset.x, cat.rect.y - camera.offset.y))
-
+            # print(self.player.attack)
             # See if shots hit the aliens.
             for enemy in pygame.sprite.groupcollide(self.enemy_group, self.player_group, 0, 0).keys():
-                if pygame.mixer and self.bark is not None:
+
+                if enemy.wait_time_done():
+                    enemy.attack_movement()
+                    enemy.oof.play()
+
+
+                self.player.HP -= 1
+                if pygame.mixer and self.bark is not None and self.player.attack:
+                    
                     self.bark.play()
+                    self.player.attack = False
+                    self.player.image = self.player.image_left
                     enemy.knockbacked = True
                     if enemy.lives <= 0:
                         enemy.kill()
                         print("collide")
 
+            # if self.player.HP <= 0:
+            #     quit()
+            # print(self.player.HP)
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)

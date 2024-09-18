@@ -4,15 +4,20 @@ GRAVITY = 0.2
 SCREEN_HEIGHT = 720
 JUMP_STRENGTH = -3.4
 KNOCKBACK_DIST = 200
+FPS = 60
 # dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
 
 class Enemy(pygame.sprite.Sprite):
     """player"""
     def __init__(self, x):
+        self.time = 1
+        self.timer = self.time * FPS
         self.lives = 3 - 1
         self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
+        self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
+
         self.bark.set_volume(0.3)
         self.bark_channel = pygame.mixer.Channel(0)
         self.x = x
@@ -24,12 +29,40 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
         self.attack = False
+        self.can_attack = False
 
         self.jump_velocity = JUMP_STRENGTH
         self.is_jumping = False
         self.facing_right = True
 
+        self.time_seg1 = 1 * FPS
+        self.time_seg1_store = self.time_seg1
+
+    def wait_time_done(self):
+        self.time_seg1 -= 1
+        if self.time_seg1 <= 0:
+            self.time_seg1 = self.time_seg1_store
+            return True
+        else:
+            return False
+
+
+    def attack_movement(self):
+        if self.is_jumping:
+            self.rect.x += self.jump_velocity
+            self.jump_velocity += GRAVITY
+            if self.rect.x >= SCREEN_HEIGHT - self.rect.height - 100:
+                self.rect.x = SCREEN_HEIGHT - self.rect.height - 100
+                # print("asdf")
+                self.is_jumping = False
+        if not self.is_jumping:
+            self.is_jumping = True
+            self.jump_velocity = JUMP_STRENGTH
+
+        print(self.time_seg1)
+
         
+
     def draw(self, screen):
         screen.blit(self.image, (self.x,0))
 
@@ -81,6 +114,10 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self, player_group):
+
+
+
+
         if not self.knockbacked:
             if self.facing_right:
                 self.image = self.image_R
