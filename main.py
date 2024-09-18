@@ -29,8 +29,8 @@ class Game():
 
         self.font = pygame.font.get_default_font()
 
-        self.bg1 = Background("assets/images/KH_BG_1-1.png")
-        self.bg2 = Background("assets/images/KH_BG_1-2.png")
+        # self.bg1 = Background("assets/images/KH_BG_1-1.png")
+        # self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
         
         # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
@@ -49,8 +49,8 @@ class Game():
         self.enemy_group.add(self.dog)
         self.enemy_group.add(self.dog2)
 
-        self.background_group.add(self.bg1)
-        self.background_group.add(self.bg2)
+        # self.background_group.add(self.bg1)
+        # self.background_group.add(self.bg2)
         self.background_group.add(self.bg3)
 
 
@@ -142,8 +142,8 @@ class Game():
 
             pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
             self.clock.tick(self.FPS)
-            self.camera.scroll()
-
+            self.camera.scroll(self.bg3.mostRighted, self.bg3.mostLefted)
+            # print(self.bg3.mostRighted, self.bg3.mostLefted)
             self.enemy_group.draw(self.screen)
             self.player_group.draw(self.screen)
             self.window.blit(self.screen, (0,0))

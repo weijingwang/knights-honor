@@ -1,5 +1,7 @@
 import pygame
 FPS = 60
+SCREEN_LEFT_BOUNDx = 0
+SCREEN_RIGHT_BOUNDx = 1280
 
 "oof sound effect from https://freesound.org/people/dersuperanton/sounds/437651/"
 "slash sound effect from https://freesound.org/people/JohnBuhr/sounds/326854/"
@@ -16,7 +18,6 @@ class PlayerClass(pygame.sprite.Sprite):
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
         self.HP = 10
-        self.left_border, self.right_border = 250, 1150
         self.direction = "right"
         self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
         self.image_right = pygame.image.load("assets/images/KH_BG_1-4.png").convert_alpha()
@@ -51,7 +52,6 @@ class PlayerClass(pygame.sprite.Sprite):
         #     pass
         #     # print("collided_enemy")
         if self.attacking:
-            print(self.attacking)
 
             if self.wait_time_done():
                 self.attacking = False
@@ -67,13 +67,13 @@ class PlayerClass(pygame.sprite.Sprite):
 
 
 
-        if self.K_LEFT:
+        if self.K_LEFT and self.rect.left >= SCREEN_LEFT_BOUNDx:
             self.rect.x -= 5
             if self.direction == "right":
                 self.direction = "left"
                 self.image = self.image_left
 
-        if self.K_RIGHT:
+        if self.K_RIGHT and self.rect.right <= SCREEN_RIGHT_BOUNDx:
             self.rect.x += 5
             if self.direction == "left":
                 self.direction = "right"
