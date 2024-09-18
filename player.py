@@ -43,7 +43,7 @@ class PlayerClass(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.width -= 0 # try perfect collison using masks later
         self.rect.topleft = (self.x, self.y)
-        self.ground_y = 224
+        self.ground_y = 232
         self.is_jumping = False
         self.rect.y = SCREEN_HEIGHT - self.rect.height - 100
         self.critical_attack = False
