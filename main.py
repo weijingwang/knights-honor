@@ -3,6 +3,8 @@ import random
 from player import PlayerClass
 from enemy import Enemy
 from camera import *
+TOTAL_LIVES = 10
+HP_WIDTH = 600
 
 class Game():
     """basic game"""
@@ -15,6 +17,9 @@ class Game():
 
         self.bark.set_volume(0.3)
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
+        self.slash.set_volume(0.6)
+        self.oof.set_volume(0.8)
+
         self.FPS = 60
         # pygame.display.set_caption("knight's honor (pygame 38)")
         self.key = pygame.key.get_pressed()
@@ -33,9 +38,9 @@ class Game():
         # self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
         
-        # pygame.mixer.music.load("assets/music/colyon-clip.ogg")
-        # pygame.mixer.music.play(-1,0.0)
-        # pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
+        pygame.mixer.music.play(-1,0.0)
+        pygame.mixer.music.set_volume(0.5)
 
         self.player = PlayerClass()
         self.dog = Enemy(752)
@@ -63,6 +68,8 @@ class Game():
         self.bgx=0
         self.bgy=0
 
+        self.HP_color = 'green'
+
 
 
         
@@ -77,6 +84,7 @@ class Game():
                     if event.key == pygame.K_SPACE: 
                         self.slash.play()
                         self.player.attacking = True
+                    if event.key == pygame.K_UP: self.player.is_jumping = True
             
                 #     # self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE
                 #     if event.key == pygame.K_LEFT: self.K_LEFT = True
@@ -91,6 +99,19 @@ class Game():
 
     # def spawn_enemies(self):
          
+    def draw_HP_bar(self):
+        if self.player.HP <= TOTAL_LIVES/4:
+            self.HP_color = "red"
+        elif self.player.HP <= TOTAL_LIVES/2:
+            self.HP_color = "yellow"
+        else:
+            self.HP_color = "green"
+  
+        pygame.draw.rect(self.screen, (130, 3, 3), pygame.Rect(30, 30, HP_WIDTH, 15))
+        pygame.draw.rect(self.screen, self.HP_color, pygame.Rect(30, 30, HP_WIDTH/TOTAL_LIVES * self.player.HP, 15))
+        pygame.draw.rect(self.screen, (230, 230, 230), pygame.Rect(30, 33, HP_WIDTH/TOTAL_LIVES * self.player.HP, 2))
+        pygame.draw.rect(self.screen, (200, 200, 200), pygame.Rect(30, 40, HP_WIDTH/TOTAL_LIVES * self.player.HP, 2))
+
 
     def game_loop(self):
         while not self.done:
@@ -110,7 +131,7 @@ class Game():
                 enemy.rect.x  -= self.camera.offset.x
                 enemy.rect.y -= self.camera.offset.y
 
-            self.enemy_group.update(self.player_group) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
+            self.enemy_group.update(self.player_group, self.screen) #use enemy group instead of updating individul enemy so that when enemy is killed, it is removed from group and not revived with the update function
             
 
 
@@ -123,16 +144,17 @@ class Game():
                 if enemy.wait_time_done():
                     enemy.attack_movement()
                     enemy.oof.play()
+                    self.player.HP -= 1
 
-
-                self.player.HP -= 1
+                
                 if pygame.mixer and self.bark is not None and self.player.attacking:
                     
                     self.bark.play()
                     self.player.attack = False
                     self.player.image = self.player.image_left
                     enemy.knockbacked = True
-                    if enemy.lives <= 0:
+                    enemy.lives -= 1*self.player.crit_multiplier
+                    if enemy.lives <= 1:
                         enemy.kill()
                         print("collide")
 
@@ -140,7 +162,8 @@ class Game():
             #     quit()
             # print(self.player.HP)
 
-            pygame.draw.rect(self.screen, (0, 128, 255), pygame.Rect(30, 30, 60, 60))
+            self.draw_HP_bar()
+
             self.clock.tick(self.FPS)
             self.camera.scroll(self.bg3.mostRighted, self.bg3.mostLefted)
             # print(self.bg3.mostRighted, self.bg3.mostLefted)

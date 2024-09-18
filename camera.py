@@ -17,7 +17,7 @@ class Background(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, (0,0))
     def update(self, camera_offset_x, camera_offset_y):
-        print(self.rect.left, self.mostLefted)
+        # print(self.rect.left, self.mostLefted)
 
         self.rect.x -= camera_offset_x
         self.rect.y -= camera_offset_y

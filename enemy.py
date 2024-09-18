@@ -5,14 +5,16 @@ SCREEN_HEIGHT = 720
 JUMP_STRENGTH = -3.4
 KNOCKBACK_DIST = 200
 FPS = 60
+ENEMY_ATTACK_TIME = 0.5
+
 # dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
 
 class Enemy(pygame.sprite.Sprite):
     """player"""
     def __init__(self, x):
-        self.time = 1
-        self.timer = self.time * FPS
-        self.lives = 3 - 1
+
+        self.TOTALLIVES = 20
+        self.lives = self.TOTALLIVES
         self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
@@ -35,7 +37,7 @@ class Enemy(pygame.sprite.Sprite):
         self.is_jumping = False
         self.facing_right = True
 
-        self.time_seg1 = 1 * FPS
+        self.time_seg1 = ENEMY_ATTACK_TIME * FPS
         self.time_seg1_store = self.time_seg1
 
     def wait_time_done(self):
@@ -71,7 +73,6 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.x += KNOCKBACK_DIST
         else:
             self.rect.x -= KNOCKBACK_DIST
-        self.lives -= 1
         self.knockbacked = False
 
             
@@ -113,7 +114,9 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = my_pos.x, my_pos.y
 
 
-    def update(self, player_group):
+    def update(self, player_group, screen):
+
+
 
         if not self.knockbacked:
             if self.facing_right:
@@ -144,3 +147,5 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.K_LEFT: self.x -= 5
         if self.K_RIGHT: self.x += 5
+
+        pygame.draw.rect(screen, 'green', pygame.Rect(self.rect.x, self.rect.y-self.rect.width/8, self.rect.width/self.TOTALLIVES*self.lives, 5))
