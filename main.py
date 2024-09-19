@@ -8,6 +8,15 @@ HP_WIDTH = 600
 
 "dog cry from : https://freesound.org/people/jocelynlopez/sounds/635114/"
 
+class GameStateController():
+    "main main main"
+    def __init__(self):
+        self.g = Game()
+        self.g.game_loop()
+        self.clock = pygame.time.Clock()
+
+    
+
 class Game():
     """basic game"""
     def __init__(self):
@@ -36,8 +45,9 @@ class Game():
         self.done = False
 
         self.font = pygame.font.get_default_font()
+        self.amadis_frame = pygame.image.load("assets/images/amadis_frame.png").convert_alpha()
 
-        self.bg1 = Background("assets/images/KH_BG_1-1.png")
+        self.bg1 = Background("assets/images/LANDSCAPEF.png")
         self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
         
@@ -192,19 +202,27 @@ class Game():
             #     quit()
             # print(self.player.HP)
 
+
+            self.enemy_group.draw(self.screen)
+            self.player_group.draw(self.screen)
+
+            
+            self.screen.blit(self.amadis_frame, (0-self.camera.camera_offset_tracker.x,0))
+
+
             self.draw_HP_bar()
 
             self.clock.tick(self.FPS)
             self.camera.scroll(self.bg3.mostRighted, self.bg3.mostLefted)
             # print(self.bg3.mostRighted, self.bg3.mostLefted)
-            self.enemy_group.draw(self.screen)
-            self.player_group.draw(self.screen)
+
+
             self.window.blit(self.screen, (0,0))
+
             pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
             pygame.display.update()
 
 
+my_game = GameStateController()
 
 
-g = Game()
-g.game_loop()
