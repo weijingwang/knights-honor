@@ -10,7 +10,6 @@ FPS = 60
 
 # Create the display
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Slideshow")
 
 # Load images
 def load_images(image_folder):

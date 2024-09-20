@@ -1,0 +1,48 @@
+import pygame
+import math
+
+
+class Intro1:
+    def __init__(self, screen, speed=6, amplitude=100, frequency=0.05):
+        self.screen = screen
+        self.bg= pygame.image.load("assets/images/intro/1/bg.png").convert_alpha()
+
+        self.image= pygame.image.load("assets/images/intro/1/char.png").convert_alpha()
+        self.speed = speed
+        self.amplitude = amplitude
+        self.frequency = frequency
+        self.x = -500  # Starting x position
+        self.t = 0  # Time parameter for y-axis movement
+        self.screen_width, self.screen_height = self.screen.get_size()
+        self.done = False
+        self.y = 0
+
+
+    def check_events(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.done = True
+
+    def calculate_y(self):
+        """Calculate the y position based on abs(sin(t))."""
+        return int(0 - self.amplitude * abs(math.sin(self.frequency * self.t)))
+    
+    def update(self, screen):
+        """Update the position of the rectangle."""
+        # Calculate the y position
+        self.y = self.calculate_y()
+        
+        # Move the rectangle along the x-axis only when y is changing (cos(t) not near 0)
+        if abs(math.cos(self.frequency * self.t)) > 0.001:
+            self.x += self.speed
+        
+        # Check if the rectangle has reached the right side of the screen
+        if self.x > self.screen_width:
+            self.done = True  # Return False to signal end of movement
+        
+        # Draw the rectangle
+        screen.blit(self.bg, (0,0))
+        screen.blit(self.image, (self.x,self.y))        
+        # Increment time
+        self.t += 1
+
