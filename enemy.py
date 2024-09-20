@@ -26,7 +26,7 @@ class Enemy(pygame.sprite.Sprite):
         self.x = x
         self.y = 446
         self.K_LEFT, self.K_RIGHT, self.K_A, self.K_D, self.K_CLICK, self.K_SPACE = False, False, False, False, False, False
-        self.image_R = pygame.image.load("assets/images/KH_BG_ENEMY.png").convert_alpha()
+        self.image_R = pygame.image.load("assets/images/KH_DOG.png").convert_alpha()
         self.image_L = pygame.transform.flip(self.image_R, True, False)
         self.image = self.image_R
         self.rect = self.image.get_rect()

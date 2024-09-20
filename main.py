@@ -7,6 +7,7 @@ from title import Title
 from animation import Animation
 from intro1 import Intro1
 from intro2 import Intro2
+from diologue import Dialogue
 
 TOTAL_LIVES = 10
 HP_WIDTH = 600
@@ -22,14 +23,15 @@ class GameStateController():
         self.window = pygame.display.set_mode((DISPLAY_W,DISPLAY_H))
 
         self.title_screen = Title("assets/images/KH_Title.png")
-        self.title_screen = Title("assets/images/dead.jpg")
+        # self.title_screen = Title("assets/images/dead.jpg")
 
         self.intro1 = Intro1(self.screen)
         self.intro2 = Animation("assets/images/intro/2", self.screen)
         self.intro3 = Intro2(self.screen)
         self.intro4 = Animation("assets/images/intro/4", self.screen, 200, True)
+        self.intro5 = Dialogue("assets/images/intro/5")
 
-        self.level1 = Game(self.screen, self.window)
+        self.level1 = Game(self.screen, self.window, 1)
         self.clock = pygame.time.Clock()
         self.state = "title"
         self.FPS = 60
@@ -46,6 +48,8 @@ class GameStateController():
         if self.intro3.done:
             self.state = "intro4"
         if not self.intro4.running:
+            self.state = "intro5"
+        if self.intro5.done:
             self.state = "game"
 
 
@@ -90,6 +94,13 @@ class GameStateController():
                     self.intro4.check_events(event)
                 self.intro4.run()
 
+            elif self.state == "intro5":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.done = True
+                    self.intro5.check_events(event)
+                self.intro5.run(self.screen)
+
             elif self.state == "game":
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -107,8 +118,9 @@ class GameStateController():
 
 class Game():
     """basic game"""
-    def __init__(self, screen, window):
-        
+    def __init__(self, screen, window, level):
+        self.level = level
+        self.enemy_count = 5
         self.screen = screen
         self.window = window
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")

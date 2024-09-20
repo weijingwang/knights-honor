@@ -11,7 +11,7 @@ class Intro2:
         self.x = 0  # Starting x position
         self.done = False
         self.y = 0
-        self.endx = -800
+        self.endx = -700
         self.endy=-400
     
     def check_events(self, event):
