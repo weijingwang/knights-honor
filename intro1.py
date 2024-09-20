@@ -3,15 +3,24 @@ import math
 
 
 class Intro1:
-    def __init__(self, screen, speed=6, amplitude=100, frequency=0.05):
+    def __init__(self, screen, num, speed=6, amplitude=100, frequency=0.05):
         self.screen = screen
-        self.bg= pygame.image.load("assets/images/intro/1/bg.png").convert_alpha()
-
-        self.image= pygame.image.load("assets/images/intro/1/char.png").convert_alpha()
+        self.num = num
+        if self.num == 1:
+            self.x = -500  # Starting x position
+            self.bg= pygame.image.load("assets/images/intro/1/bg.png").convert_alpha()
+            self.image= pygame.image.load("assets/images/intro/1/char.png").convert_alpha()
+        elif self.num == 9:
+            speed = 6
+            amplitude = 10
+            frequency = 10
+            self.x = 0
+            self.bg= pygame.image.load("assets/images/intro/9/bg.png").convert_alpha()
+            self.image= pygame.image.load("assets/images/intro/9/char.png").convert_alpha()
         self.speed = speed
         self.amplitude = amplitude
         self.frequency = frequency
-        self.x = -500  # Starting x position
+        
         self.t = 0  # Time parameter for y-axis movement
         self.screen_width, self.screen_height = self.screen.get_size()
         self.done = False

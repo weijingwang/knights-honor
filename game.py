@@ -17,6 +17,9 @@ class Game():
         elif level == 2:
             self.enemy_count = 3
             self.enemy_image_path = "assets/images/KH_ENEMY.png"
+        elif level == 3:
+            self.enemy_count = 2
+            self.enemy_image_path = "assets/images/KH_LION.png"
 
         self.screen = screen
         self.window = window
