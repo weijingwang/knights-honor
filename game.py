@@ -11,7 +11,13 @@ class Game():
     """basic game"""
     def __init__(self, screen, window, level):
         self.level = level
-        self.enemy_count = 5
+        if level == 1:
+            self.enemy_count = 5
+            self.enemy_image_path = "assets/images/KH_DOG.png"
+        elif level == 2:
+            self.enemy_count = 3
+            self.enemy_image_path = "assets/images/KH_ENEMY.png"
+
         self.screen = screen
         self.window = window
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
@@ -38,10 +44,6 @@ class Game():
         self.bg1 = Background("assets/images/LANDSCAPEF.png")
         self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
-        
-        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
-        pygame.mixer.music.play(-1,0.0)
-        pygame.mixer.music.set_volume(0.7)
 
         self.player = PlayerClass()
 
@@ -71,6 +73,10 @@ class Game():
         self.max_spawn = 3
 
         self.spawn_location = 0
+
+        self.done = False
+        self.current_spawned = 0
+        self.current_slain = 0
 
 
 
@@ -112,10 +118,11 @@ class Game():
                 dogx = random.randrange(1280*2,1280*2+300)
             dogx = dogx  - self.camera.camera_offset_tracker.x # - 1280/2
 
-            dog = Enemy(dogx)
+            dog = Enemy(dogx, self.enemy_image_path)
             self.enemy_group.add(dog)
             print("enemy spawned at", dogx)
             self.spawn_location = not self.spawn_location
+            self.current_spawned += 1
 
 
 
@@ -142,7 +149,11 @@ class Game():
 
 
     def game_loop(self):
-        self.spawn_enemies()
+        if self.current_slain >= self.enemy_count:
+            self.done = True
+
+        if self.current_slain + len(self.enemy_group) < self.enemy_count:
+            self.spawn_enemies()
         
         self.check_events()
 
@@ -181,6 +192,7 @@ class Game():
                 if enemy.lives <= 1:
                     self.dogcry.play()
                     enemy.kill()
+                    self.current_slain += 1
                     print("collide")
                 else:
                     self.bark.play()

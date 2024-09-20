@@ -16,7 +16,7 @@ class Intro2:
     
     def check_events(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_RETURN:
                 self.done = True
 
     def update(self, screen):

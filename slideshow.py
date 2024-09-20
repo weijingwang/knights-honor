@@ -5,92 +5,95 @@ import os
 pygame.init()
 
 # Define constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 FPS = 60
 
-# Create the display
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+class Slideshow:
+    def __init__(self, image_folder, timings, fade_duration=200):
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Slideshow")
+        self.clock = pygame.time.Clock()
+        self.images = self.load_images(image_folder)
+        self.timings = timings
+        self.fade_duration = fade_duration  # milliseconds for fade transition
+        self.current_index = 0
+        self.slide_start_time = pygame.time.get_ticks()
+        self.fade_start_time = None
+        self.fade_in_progress = False
+        self.running = True
 
-# Load images
-def load_images(image_folder):
-    images = []
-    for file in os.listdir(image_folder):
-        if file.endswith((".png", ".jpg", ".jpeg", ".bmp")):
+    def load_images(self, image_folder):
+        """Load all images from the given folder, sort by name, and scale them to fit the screen."""
+        images = []
+        # List and sort the image files by name
+        files = sorted([file for file in os.listdir(image_folder) if file.endswith((".png", ".jpg", ".jpeg", ".bmp"))])
+        for file in files:
             img = pygame.image.load(os.path.join(image_folder, file))
             img = pygame.transform.scale(img, (SCREEN_WIDTH, SCREEN_HEIGHT))
             images.append(img)
-    return images
+        return images
 
-# Fade between two images with simultaneous fading out and in
-def fade_transition(image1, image2, fade_duration, current_time, start_time, screen):
-    fade_progress = (current_time - start_time) / fade_duration
-    if fade_progress > 1:
-        fade_progress = 1  # Cap the progress to avoid overflow
+    def fade_transition(self, image1, image2, current_time):
+        """Handles fading between two images with simultaneous fading out and in."""
+        fade_progress = (current_time - self.fade_start_time) / self.fade_duration
+        fade_progress = min(fade_progress, 1)  # Cap progress at 1 to avoid overflow
 
-    # Fade out the current image
-    image1.set_alpha(int((1 - fade_progress) * 255))
-    screen.blit(image1, (0, 0))
+        # Fade out the current image
+        image1.set_alpha(int((1 - fade_progress) * 255))
+        self.screen.blit(image1, (0, 0))
 
-    # Fade in the next image
-    image2.set_alpha(int(fade_progress * 255))
-    screen.blit(image2, (0, 0))
+        # Fade in the next image
+        image2.set_alpha(int(fade_progress * 255))
+        self.screen.blit(image2, (0, 0))
 
-    pygame.display.flip()
+        pygame.display.flip()
 
-# Run slideshow
-def run_slideshow(images, timings):
-    clock = pygame.time.Clock()
-    current_index = 0
-    fade_duration = 2000  # milliseconds for fade transition
-    slide_start_time = pygame.time.get_ticks()  # Start time for the first slide
-    fade_start_time = None
+    def run(self):
+        """Main loop to run the slideshow."""
+        while self.running:
+            current_time = pygame.time.get_ticks()
 
-    running = True
-    fade_in_progress = False
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
 
-    while running:
-        current_time = pygame.time.get_ticks()
+            current_image = self.images[self.current_index]
+            next_image = self.images[(self.current_index + 1) % len(self.images)]
 
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            # Check if it's time to transition to the next slide
+            if not self.fade_in_progress and current_time - self.slide_start_time >= self.timings[self.current_index] * 1000:
+                self.fade_start_time = pygame.time.get_ticks()
+                self.fade_in_progress = True
 
-        current_image = images[current_index]
-        next_image = images[(current_index + 1) % len(images)]
+            # If fade is in progress
+            if self.fade_in_progress:
+                self.fade_transition(current_image, next_image, current_time)
 
-        # Check if it's time to transition to the next slide
-        if not fade_in_progress and current_time - slide_start_time >= timings[current_index] * 1000:
-            fade_start_time = pygame.time.get_ticks()
-            fade_in_progress = True
+                # When fade completes, move to the next image
+                if current_time - self.fade_start_time >= self.fade_duration:
+                    self.fade_in_progress = False
+                    self.current_index = (self.current_index + 1) % len(self.images)
+                    self.slide_start_time = pygame.time.get_ticks()  # Reset slide timer
 
-        # If fade is in progress
-        if fade_in_progress:
-            fade_transition(current_image, next_image, fade_duration, current_time, fade_start_time, screen)
+            # If no fade, just show the current image
+            if not self.fade_in_progress:
+                self.screen.blit(current_image, (0, 0))
+                pygame.display.flip()
 
-            # When fade completes, move to the next image
-            if current_time - fade_start_time >= fade_duration:
-                fade_in_progress = False
-                current_index = (current_index + 1) % len(images)
-                slide_start_time = pygame.time.get_ticks()  # Reset slide timer
-
-        # If no fade, just show the current image
-        if not fade_in_progress:
-            screen.blit(current_image, (0, 0))
-            pygame.display.flip()
-
-        clock.tick(FPS)
+            self.clock.tick(FPS)
 
 # Main function
 def main():
-    image_folder = "images"  # Folder with images
-    images = load_images(image_folder)
-    
+    image_folder = "assets/images/intro/4"  # Folder with images
     # Set the timing for each slide (in seconds)
-    timings = [1, 1, 1, 2]  # Example: each slide can have a different duration
+    timings = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,]   # Example: each slide can have a different duration
     
-    if len(images) > 0:
-        run_slideshow(images, timings)
+    # Initialize and run the slideshow
+    slideshow = Slideshow(image_folder, timings)
+    
+    if len(slideshow.images) > 0:
+        slideshow.run()
     else:
         print("No images found in the folder.")
 

@@ -22,7 +22,7 @@ class Animation:
 
     def check_events(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_RETURN:
                 self.running = False
 
     def numeric_sort_key(self, filename):

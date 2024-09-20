@@ -17,11 +17,11 @@ class Dialogue:
 
     def check_events(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_RETURN:
                 if self.current_image_idx >= len(self.images)-1:
                     self.done = True
                 else:
                     self.current_image_idx = (self.current_image_idx + 1) 
 
-        print(self.current_image_idx)
 
+# https://freesound.org/people/Supercolio/sounds/355741/
