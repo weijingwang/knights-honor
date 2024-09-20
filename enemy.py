@@ -1,9 +1,9 @@
 import pygame
-FOLLOW_SPEED = 1
+FOLLOW_SPEED = 3
 GRAVITY = 0.2
 SCREEN_HEIGHT = 720
 JUMP_STRENGTH = -3.4
-KNOCKBACK_DIST = 200
+KNOCKBACK_DIST = 300
 FPS = 60
 ENEMY_ATTACK_TIME = 0.5
 
@@ -14,7 +14,7 @@ class Enemy(pygame.sprite.Sprite):
     """player"""
     def __init__(self, x):
 
-        self.TOTALLIVES = 20
+        self.TOTALLIVES = 15
         self.lives = self.TOTALLIVES
         self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
@@ -138,10 +138,10 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self.knockback()
 
-        # if self.rect.left < background_rect.left:
-        #     self.rect.left = background_rect.left
-        # if self.rect.right > background_rect.right:
-        #     self.rect.right = background_rect.right
+        if self.rect.left < background_rect.left:
+            self.rect.left = background_rect.left
+        if self.rect.right > background_rect.right:
+            self.rect.right = background_rect.right
 
 
 
