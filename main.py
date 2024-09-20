@@ -20,7 +20,7 @@ pygame.init()
 class GameStateController():
     "main main main"
     def __init__(self):
-        self.current_music_path = "assets/music/colyon.mp3"
+        self.current_music_path = "assets/music/colyon-clip.ogg"
 
         pygame.mixer.music.load(self.current_music_path)
         pygame.mixer.music.set_volume(0.7)
