@@ -150,6 +150,10 @@ class Game():
         pygame.draw.rect(self.screen, (230, 230, 230), pygame.Rect(30, 33, HP_WIDTH/TOTAL_LIVES * self.player.HP, 2))
         pygame.draw.rect(self.screen, (200, 200, 200), pygame.Rect(30, 40, HP_WIDTH/TOTAL_LIVES * self.player.HP, 2))
 
+    def draw_stamina_bar(self):
+        pygame.draw.rect(self.screen, (80, 80, 80), pygame.Rect(30, 50, 300, 15))
+        pygame.draw.rect(self.screen, (180,180,70), pygame.Rect(30, 50, 300/self.player.attack_cooldown_timer_store * self.player.attack_cooldown_timer, 15))
+
 
     def game_loop(self):
         if self.current_slain >= self.enemy_count:
@@ -166,7 +170,7 @@ class Game():
         self.player.rect.x = self.player.rect.x - self.camera.offset.x
         self.player.rect.y = self.player.rect.y - self.camera.offset.y
 
-        self.player.update(self.enemy_group)
+        self.player.update()
 
         for enemy in self.enemy_group:
             enemy.rect.x  -= self.camera.offset.x
@@ -187,8 +191,7 @@ class Game():
                 enemy.oof.play()
                 self.player.HP -= 1
 
-            print(self.player.can_attack)
-            if pygame.mixer and self.bark is not None and self.player.attacking and self.player.can_attack:
+            if pygame.mixer and self.bark is not None and self.player.attacking and self.player.damaging:
                 # self.player.image = self.player.image_left
                 enemy.knockbacked = True
                 enemy.lives -= 1*self.player.crit_multiplier
@@ -215,5 +218,6 @@ class Game():
 
 
         self.draw_HP_bar()
+        self.draw_stamina_bar()
 
         self.camera.scroll(self.bg3.mostRighted, self.bg3.mostLefted)

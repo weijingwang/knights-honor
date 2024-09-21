@@ -57,7 +57,7 @@ class GameStateController():
         self.level3 = Game(self.screen, self.window, 3)
 
         self.clock = pygame.time.Clock()
-        self.state = "intro7"
+        self.state = "level3"
         self.FPS = 60
         self.can_switch_music1 = True #fadeout
         self.can_switch_music2 = True #new music lions

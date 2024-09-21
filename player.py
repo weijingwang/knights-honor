@@ -21,9 +21,13 @@ class PlayerClass(pygame.sprite.Sprite):
         self.attack_timer = 0.2 * FPS
         self.attack_timer_store = self.attack_timer
 
-        self.attack_cooldown_timer = 1 * FPS
+        self.attack_cooldown_timer = 0.5 * FPS
         self.attack_cooldown_timer_store = self.attack_cooldown_timer
         self.cooldown_timer_start = False
+        
+        self.damaging = False
+        self.damaging_timer =  2
+        self.damaging_timer_store = self.damaging_timer
 
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
@@ -52,6 +56,10 @@ class PlayerClass(pygame.sprite.Sprite):
         self.crit_multiplier = NO_CRIT_MULT
 
         self.can_attack = True
+        self.can_start_timer = True
+        self.can_damage = True
+
+
 
     def jump(self):
         if self.is_jumping:
@@ -78,37 +86,57 @@ class PlayerClass(pygame.sprite.Sprite):
         else:
             return False
 
+    def wait_time_done2(self):
+        self.damaging_timer -= 1
+        if self.damaging_timer <= 0:
+            self.damaging_timer = self.damaging_timer_store
+            return True
+        else:
+            return False
+        
+
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
-    def update(self, enemy_group):
+    def update(self):
         if self.cooldown_timer_start:
             if self.attack_cooldown_timer > 0:
                 self.attack_cooldown_timer -= 1
             else:
                 self.attack_cooldown_timer = self.attack_cooldown_timer_store
                 self.cooldown_timer_start = False
+                self.can_attack = True
+                self.can_damage = True
 
         self.jump()
-        # collided_enemy = pygame.sprite.spritecollideany(self, enemy_group)
-        # if collided_enemy:
-        #     pass
-        #     # print("collided_enemy")
-        if self.attacking:
-            # self.cooldown_timer_start = True
-            if self.attack_cooldown_timer == self.attack_cooldown_timer_store:
-                if self.wait_time_done():
-                    self.attacking = False
-                    if self.direction == "right":
-                        self.image = self.image_right
-                    elif self.direction == "left":
-                        self.image = self.image_left
+
+        if self.attack_cooldown_timer == self.attack_cooldown_timer_store: #only start attack timer when cooldown is fully full
+            self.can_start_timer = True
+
+        # print(self.cooldown_timer_start, self.can_attack, self.attacking, self.damaging, self.damaging_timer)
+        if self.can_start_timer and self.attacking:
+            if self.can_damage:
+                if self.wait_time_done2():#damage timer if done, stop damage
+                    self.damaging = False
+                    self.can_damage = False
                 else:
-                    if self.direction == "right":
-                        self.image = self.image_righta
-                    elif self.direction == "left":
-                        self.image = self.image_lefta
-            else:
+                    self.damaging = True
+
+            if self.wait_time_done(): #if finished attacking
                 self.attacking = False
+                self.cooldown_timer_start = True
+                self.damaging_timer = self.damaging_timer_store
+                if self.direction == "right":
+                    self.image = self.image_right
+                elif self.direction == "left":
+                    self.image = self.image_left
+            else:
+                self.attacking = True
+                self.can_attack = False
+                if self.direction == "right":
+                    self.image = self.image_righta
+                elif self.direction == "left":
+                    self.image = self.image_lefta
+
 
 
 
