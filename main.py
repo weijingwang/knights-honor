@@ -43,10 +43,13 @@ class GameStateController():
         self.intro4 = Animation("assets/images/intro/4", self.screen, 200, True)
         self.intro5 = Dialogue("assets/images/intro/5")
         self.intro6 = Dialogue("assets/images/intro/6")
-        self.intro7 = Slideshow("assets/images/intro/7", (0.5, 2, 1))
-        self.intro8 = Animation("assets/images/intro/8", self.screen, 500, False)
-        self.intro9 = Intro1(self.screen, 9)
-        self.intro10 = Slideshow("assets/images/intro/10", (2,1,0.1), 5000)
+        self.intro7 = Dialogue("assets/images/intro/7")
+
+
+        self.intro8 = Slideshow("assets/images/intro/8", (0.5,1,1,1), 1000)
+        self.intro9 = Animation("assets/images/intro/9", self.screen, 500, False)
+        self.intro10 = Intro1(self.screen, 10)
+        self.intro11 = Slideshow("assets/images/intro/11", (2,1,0.1), 5000)
 
 
 
@@ -55,9 +58,10 @@ class GameStateController():
         self.level3 = Game(self.screen, self.window, 3)
 
         self.clock = pygame.time.Clock()
-        self.state = "level2"
+        self.state = "level1"
         self.FPS = 60
-        self.can_switch_music1 = True
+        self.can_switch_music1 = True #fadeout
+        self.can_switch_music2 = True #new music lions
         self.done = False
 
     def update_state(self):
@@ -77,25 +81,34 @@ class GameStateController():
         if self.level1.done:
             self.state = "intro6"
             if self.woman_can_cry:
+                self.level1.bark.stop()
                 self.woman_cry.play()
+                print("CRIY")
                 self.woman_can_cry = False
         if self.intro6.done:
             self.state = "level2"
         if self.level2.done:
+            self.state = "intro7"
             if self.can_switch_music1:
-                pygame.mixer.music.fadeout(100)
+                pygame.mixer.music.fadeout(3000)
+                self.can_switch_music1 = False
+            
+        if self.intro7.done:
+            if self.can_switch_music2:
+                pygame.mixer.stop()
                 pygame.mixer.music.load("assets/music/kh-lion-long.ogg")
                 pygame.mixer.music.set_volume(0.7)
                 pygame.mixer.music.play(-1,0.0)
-                self.can_switch_music1 = False
-            self.state = "intro7"
-        if self.intro7.done:
+                self.can_switch_music2 = False
             self.state = "intro8"
-        if not self.intro8.running:
+
+        if self.intro8.done:
             self.state = "intro9"
-        if self.intro9.done:
+        if not self.intro9.running:
             self.state = "intro10"
         if self.intro10.done:
+            self.state = "intro11"
+        if self.intro11.done:
             self.state = "level3"
 
     def main_loop(self):
@@ -182,23 +195,30 @@ class GameStateController():
                     if event.type == pygame.QUIT:
                         self.done = True
                     self.intro8.check_events(event)
-                self.intro8.run()
+                self.intro8.run(self.screen)
 
             elif self.state == "intro9":
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.done = True
                     self.intro9.check_events(event)
-
-                self.intro9.update(self.screen)
-
+                self.intro9.run()
 
             elif self.state == "intro10":
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.done = True
                     self.intro10.check_events(event)
-                self.intro10.run(self.screen)
+
+                self.intro10.update(self.screen)
+
+
+            elif self.state == "intro11":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.done = True
+                    self.intro11.check_events(event)
+                self.intro11.run(self.screen)
 
             elif self.state == "level3":
                 for event in pygame.event.get():

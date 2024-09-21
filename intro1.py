@@ -10,13 +10,13 @@ class Intro1:
             self.x = -500  # Starting x position
             self.bg= pygame.image.load("assets/images/intro/1/bg.png").convert_alpha()
             self.image= pygame.image.load("assets/images/intro/1/char.png").convert_alpha()
-        elif self.num == 9:
+        elif self.num == 10:
             speed = 6
             amplitude = 10
             frequency = 10
             self.x = 0
-            self.bg= pygame.image.load("assets/images/intro/9/bg.png").convert_alpha()
-            self.image= pygame.image.load("assets/images/intro/9/char.png").convert_alpha()
+            self.bg= pygame.image.load("assets/images/intro/10/bg.png").convert_alpha()
+            self.image= pygame.image.load("assets/images/intro/10/char.png").convert_alpha()
         self.speed = speed
         self.amplitude = amplitude
         self.frequency = frequency
