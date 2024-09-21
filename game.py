@@ -26,11 +26,11 @@ class Game():
         self.bark = pygame.mixer.Sound("assets/se/dog_bark_clip.ogg")
         self.oof = pygame.mixer.Sound("assets/se/oof-clip.ogg")
         self.dogcry = pygame.mixer.Sound("assets/se/dogcry-clip.ogg")
-        self.dogcry.set_volume(0.5)
-        self.bark.set_volume(0.3)
+        self.dogcry.set_volume(0.3)
+        self.bark.set_volume(0.1)
         self.slash = pygame.mixer.Sound("assets/se/slash-clip.ogg")
-        self.slash.set_volume(0.6)
-        self.oof.set_volume(0.6)
+        self.slash.set_volume(0.1)
+        self.oof.set_volume(0.01)
 
         self.FPS = 60
         # pygame.display.set_caption("knight's honor (pygame 38)")

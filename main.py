@@ -21,13 +21,13 @@ pygame.init()
 class GameStateController():
     "main main main"
     def __init__(self):
-        self.current_music_path = "assets/music/colyon-clip.ogg"
 
-        pygame.mixer.music.load(self.current_music_path)
+        pygame.mixer.music.load("assets/music/colyon-clip.ogg")
         pygame.mixer.music.set_volume(0.7)
         pygame.mixer.music.play(-1,0.0)
         
         self.woman_cry = pygame.mixer.Sound("assets/se/woman_cry.ogg")
+        self.woman_can_cry = True
 
         self.woman_cry.set_volume(0.3)
 
@@ -43,7 +43,7 @@ class GameStateController():
         self.intro4 = Animation("assets/images/intro/4", self.screen, 200, True)
         self.intro5 = Dialogue("assets/images/intro/5")
         self.intro6 = Dialogue("assets/images/intro/6")
-        self.intro7 = Slideshow("assets/images/intro/7", (1, 2, 1))
+        self.intro7 = Slideshow("assets/images/intro/7", (0.5, 2, 1))
         self.intro8 = Animation("assets/images/intro/8", self.screen, 500, False)
         self.intro9 = Intro1(self.screen, 9)
         self.intro10 = Slideshow("assets/images/intro/10", (2,1,0.1), 5000)
@@ -55,9 +55,9 @@ class GameStateController():
         self.level3 = Game(self.screen, self.window, 3)
 
         self.clock = pygame.time.Clock()
-        self.state = "intro7"
+        self.state = "level2"
         self.FPS = 60
-
+        self.can_switch_music1 = True
         self.done = False
 
     def update_state(self):
@@ -76,10 +76,18 @@ class GameStateController():
             self.state = "level1"
         if self.level1.done:
             self.state = "intro6"
-            self.woman_cry.play()
+            if self.woman_can_cry:
+                self.woman_cry.play()
+                self.woman_can_cry = False
         if self.intro6.done:
             self.state = "level2"
         if self.level2.done:
+            if self.can_switch_music1:
+                pygame.mixer.music.fadeout(100)
+                pygame.mixer.music.load("assets/music/kh-lion-long.ogg")
+                pygame.mixer.music.set_volume(0.7)
+                pygame.mixer.music.play(-1,0.0)
+                self.can_switch_music1 = False
             self.state = "intro7"
         if self.intro7.done:
             self.state = "intro8"
