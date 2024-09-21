@@ -6,7 +6,7 @@ A game made for Pyweek 38 with the theme "traitor".\
 do ```python3 main.py``` to run
 
 ## Requirements:
-Python 3.12.6 and pygame 2.6.0
+**Python 3.12.6 and pygame 2.6.0**
 
 ## Game controls
 RETURN: to skip cutscenes or advance dialogue \
