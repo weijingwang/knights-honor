@@ -44,12 +44,11 @@ class GameStateController():
         self.intro5 = Dialogue("assets/images/intro/5")
         self.intro6 = Dialogue("assets/images/intro/6")
         self.intro7 = Dialogue("assets/images/intro/7")
-
-
         self.intro8 = Slideshow("assets/images/intro/8", (0.5,1,1,1), 1000)
         self.intro9 = Animation("assets/images/intro/9", self.screen, 500, False)
-        self.intro10 = Intro1(self.screen, 10)
-        self.intro11 = Slideshow("assets/images/intro/11", (2,1,0.1), 5000)
+        self.intro10 = Animation("assets/images/intro/10", self.screen, 200, False)
+        self.intro11 = Animation("assets/images/intro/11", self.screen, 400, False)
+
 
 
 
@@ -58,7 +57,7 @@ class GameStateController():
         self.level3 = Game(self.screen, self.window, 3)
 
         self.clock = pygame.time.Clock()
-        self.state = "level1"
+        self.state = "intro7"
         self.FPS = 60
         self.can_switch_music1 = True #fadeout
         self.can_switch_music2 = True #new music lions
@@ -106,9 +105,10 @@ class GameStateController():
             self.state = "intro9"
         if not self.intro9.running:
             self.state = "intro10"
-        if self.intro10.done:
+        if not self.intro10.running:
             self.state = "intro11"
-        if self.intro11.done:
+
+        if not self.intro11.running:
             self.state = "level3"
 
     def main_loop(self):
@@ -209,16 +209,14 @@ class GameStateController():
                     if event.type == pygame.QUIT:
                         self.done = True
                     self.intro10.check_events(event)
-
-                self.intro10.update(self.screen)
-
+                self.intro10.run()
 
             elif self.state == "intro11":
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.done = True
                     self.intro11.check_events(event)
-                self.intro11.run(self.screen)
+                self.intro11.run()
 
             elif self.state == "level3":
                 for event in pygame.event.get():
