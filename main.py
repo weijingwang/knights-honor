@@ -8,6 +8,7 @@ from intro2 import Intro2
 from diologue import Dialogue
 from game import Game
 from slideshow import Slideshow
+from chase import ChaseGame
 
 TOTAL_LIVES = 10
 HP_WIDTH = 600
@@ -31,7 +32,7 @@ class GameStateController():
 
         self.roar = pygame.mixer.Sound("assets/se/roar.ogg")
         self.can_roar = True
-        self.roar.set_volume(0.3)
+        self.roar.set_volume(0.4)
 
         self.screen = pygame.Surface((DISPLAY_W,DISPLAY_H))
         self.window = pygame.display.set_mode((DISPLAY_W,DISPLAY_H))
@@ -50,13 +51,14 @@ class GameStateController():
         self.intro10 = Animation("assets/images/intro/10", self.screen, 200, False)
         self.intro11 = Animation("assets/images/intro/11", self.screen, 200, False)
         self.intro12 = Animation("assets/images/intro/12", self.screen, 400, False)
-
+        self.intro13 = Dialogue("assets/images/intro/13")
 
 
 
         self.level1 = Game(self.screen, self.window, 1)
         self.level2 = Game(self.screen, self.window, 2)
         self.level3 = Game(self.screen, self.window, 3)
+        self.level4 = ChaseGame()
 
         self.clock = pygame.time.Clock()
         self.state = "intro7"
@@ -115,6 +117,10 @@ class GameStateController():
                 self.can_roar = False
         if not self.intro12.running:
             self.state = "level3"
+        if self.level3.done:
+            self.state = "intro13"
+        if self.intro13.done:
+            self.state = "level4"
 
     def main_loop(self):
         while not self.done:
@@ -238,6 +244,19 @@ class GameStateController():
                 self.screen.fill((0,0,0))
                 # if self.state == "game":
                 self.level3.game_loop()
+
+            elif self.state == "intro13":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.done = True
+                    self.intro13.check_events(event)
+                self.intro13.run(self.screen)
+
+            elif self.state == "level4":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.done = True
+                self.level4.run(self.screen)
 
 
 

@@ -1,17 +1,17 @@
 import pygame
-FOLLOW_SPEED = 3
+
 GRAVITY = 0.2
 SCREEN_HEIGHT = 720
 JUMP_STRENGTH = -3.4
-KNOCKBACK_DIST = 300
 FPS = 60
 ENEMY_ATTACK_TIME = 0.5
 
 
 class Enemy(pygame.sprite.Sprite):
     """player"""
-    def __init__(self, x, image_path, TOTALLIVES=3):
-
+    def __init__(self, x, image_path, TOTALLIVES=3, FOLLOW_SPEED = 3, KNOCKBACK_DIST = 300):
+        self.FOLLOW_SPEED = FOLLOW_SPEED
+        self.KNOCKBACK_DIST = KNOCKBACK_DIST
         self.TOTALLIVES = TOTALLIVES
         self.lives = self.TOTALLIVES
         self.knockbacked = False
@@ -69,9 +69,9 @@ class Enemy(pygame.sprite.Sprite):
 
     def knockback(self):
         if self.facing_right:
-            self.rect.x += KNOCKBACK_DIST
+            self.rect.x += self.KNOCKBACK_DIST
         else:
-            self.rect.x -= KNOCKBACK_DIST
+            self.rect.x -= self.KNOCKBACK_DIST
         self.knockbacked = False
 
             
@@ -108,10 +108,10 @@ class Enemy(pygame.sprite.Sprite):
 
         # Move enemy in the direction of the target
         if self.rect.center[0] < 0 - camera.x - 1280/2 or self.rect.center[0] > 1280*2 -camera.x - 1280/2 + 2*self.rect.width:
-            my_pos += direction * FOLLOW_SPEED * 20
+            my_pos += direction * self.FOLLOW_SPEED * 20
             # print('fast')
         else:
-            my_pos += direction * FOLLOW_SPEED 
+            my_pos += direction * self.FOLLOW_SPEED 
 
         # Update enemy's position
         self.rect.center = (my_pos.x, my_pos.y)

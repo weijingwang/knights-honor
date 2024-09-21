@@ -6,3 +6,6 @@ dogcry-clip : https://freesound.org/people/jocelynlopez/sounds/635114/
 woman_cry : https://freesound.org/people/aebttny/sounds/569076/
 oof-clip: https://freesound.org/people/dersuperanton/sounds/437651/
 slash-clip : https://freesound.org/people/JohnBuhr/sounds/326854/"
+roar : https://soundbible.com/1282-Lion-Roar.html
+
+

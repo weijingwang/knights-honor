@@ -16,14 +16,23 @@ class Game():
             self.enemy_count = 5
             self.enemy_image_path = "assets/images/KH_DOG.png"
             self.enemy_lives =3
+            self.enemy_speed = 3
+            self.enemy_knockback_dist = 300
+            self.max_spawn = 3
         elif level == 2:
             self.enemy_count = 3
             self.enemy_image_path = "assets/images/KH_ENEMY.png"
             self.enemy_lives = 6
+            self.enemy_speed = 3
+            self.enemy_knockback_dist = 300
+            self.max_spawn = 3
         elif level == 3:
-            self.enemy_count = 2
+            self.enemy_count = 3
             self.enemy_image_path = "assets/images/KH_LION.png"
             self.enemy_lives = 9
+            self.enemy_speed = 1
+            self.enemy_knockback_dist = 100
+            self.max_spawn = 1
 
         self.screen = screen
         self.window = window
@@ -67,7 +76,7 @@ class Game():
 
         self.spawn_timer = 1 * self.FPS
         self.spawn_timer_store = self.spawn_timer
-        self.max_spawn = 3
+        
         self.spawn_location = 0
         self.done = False
         self.current_spawned = 0
@@ -107,7 +116,7 @@ class Game():
             else:
                 dogx = random.randrange(1280 * 2, 1280 * 2 + 300)
             dogx = dogx - self.camera.camera_offset_tracker.x
-            dog = Enemy(dogx, self.enemy_image_path, self.enemy_lives)
+            dog = Enemy(dogx, self.enemy_image_path, self.enemy_lives, self.enemy_speed, self.enemy_knockback_dist)
             self.enemy_group.add(dog)
             self.spawn_location = not self.spawn_location
             self.current_spawned += 1
