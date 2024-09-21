@@ -135,6 +135,10 @@ class PlayerClass(pygame.sprite.Sprite):
                 elif self.direction == "left":
                     self.image = self.image_lefta
 
+        else:
+            if self.HP < TOTAL_LIVES:
+                self.HP += 0.002
+
 
 
 

@@ -27,7 +27,7 @@ class Game():
             self.enemy_knockback_dist = 300
             self.max_spawn = 3
         elif level == 3:
-            self.enemy_count = 3
+            self.enemy_count = 4
             self.enemy_image_path = "assets/images/KH_LION.png"
             self.enemy_lives = 9
             self.enemy_speed = 1
