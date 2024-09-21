@@ -1,5 +1,5 @@
 # knights-honor
-Pyweek 38 for the theme "traitor".\
+A game made for Pyweek 38 with the theme "traitor".\
 *A knights errant is seeking to perform extrodinary feats to elavate honour and fame when he finds a dwarf who is begging for a boon...*
 
 ## instructions
