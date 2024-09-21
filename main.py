@@ -263,7 +263,7 @@ class GameStateController():
             self.window.blit(self.screen, (0,0))
             self.clock.tick(self.FPS)
             pygame.display.update()
-            pygame.display.set_caption("current FPS: "+str(self.clock.get_fps()))
+            pygame.display.set_caption("[Pyweek38] Knight's Honor by speedlimit35 (FPS: "+str(int(self.clock.get_fps()))+")")
 
 
 
