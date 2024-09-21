@@ -1,0 +1,8 @@
+code, art, music: speedlimit35
+
+Sound effects:
+dog_bark : https://freesound.org/people/deleted_user_3424813/sounds/260776/
+dogcry-clip : https://freesound.org/people/jocelynlopez/sounds/635114/
+woman_cry : https://freesound.org/people/aebttny/sounds/569076/
+oof-clip: https://freesound.org/people/dersuperanton/sounds/437651/
+slash-clip : https://freesound.org/people/JohnBuhr/sounds/326854/"

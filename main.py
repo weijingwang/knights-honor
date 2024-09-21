@@ -12,8 +12,7 @@ from slideshow import Slideshow
 TOTAL_LIVES = 10
 HP_WIDTH = 600
 DISPLAY_W, DISPLAY_H = 1280, 720
-"dog cry from : https://freesound.org/people/jocelynlopez/sounds/635114/"
-"woman cry from: https://freesound.org/people/aebttny/sounds/569076/"
+
 
 pygame.mixer.pre_init()
 pygame.init()
@@ -28,14 +27,16 @@ class GameStateController():
         
         self.woman_cry = pygame.mixer.Sound("assets/se/woman_cry.ogg")
         self.woman_can_cry = True
-
         self.woman_cry.set_volume(0.3)
+
+        self.roar = pygame.mixer.Sound("assets/se/roar.ogg")
+        self.can_roar = True
+        self.roar.set_volume(0.3)
 
         self.screen = pygame.Surface((DISPLAY_W,DISPLAY_H))
         self.window = pygame.display.set_mode((DISPLAY_W,DISPLAY_H))
 
         self.title_screen = Title("assets/images/KH_Title.png")
-        # self.title_screen = Title("assets/images/dead.jpg")
 
         self.intro1 = Intro1(self.screen, 1)
         self.intro2 = Animation("assets/images/intro/2", self.screen)
@@ -83,7 +84,6 @@ class GameStateController():
             if self.woman_can_cry:
                 self.level1.bark.stop()
                 self.woman_cry.play()
-                print("CRIY")
                 self.woman_can_cry = False
         if self.intro6.done:
             self.state = "level2"
@@ -110,6 +110,9 @@ class GameStateController():
             self.state = "intro11"
         if not self.intro11.running:
             self.state = "intro12"
+            if self.can_roar:
+                self.roar.play()
+                self.can_roar = False
         if not self.intro12.running:
             self.state = "level3"
 

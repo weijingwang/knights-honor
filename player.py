@@ -9,8 +9,6 @@ JUMP_STRENGTH = -25
 CRIT_MULT = 2
 NO_CRIT_MULT = 1
 TOTAL_LIVES = 10
-"oof sound effect from https://freesound.org/people/dersuperanton/sounds/437651/"
-"slash sound effect from https://freesound.org/people/JohnBuhr/sounds/326854/"
 
 class PlayerClass(pygame.sprite.Sprite):
     """player"""

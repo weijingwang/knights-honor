@@ -15,12 +15,15 @@ class Game():
         if level == 1:
             self.enemy_count = 5
             self.enemy_image_path = "assets/images/KH_DOG.png"
+            self.enemy_lives =3
         elif level == 2:
             self.enemy_count = 3
             self.enemy_image_path = "assets/images/KH_ENEMY.png"
+            self.enemy_lives = 6
         elif level == 3:
             self.enemy_count = 2
             self.enemy_image_path = "assets/images/KH_LION.png"
+            self.enemy_lives = 9
 
         self.screen = screen
         self.window = window
@@ -42,6 +45,9 @@ class Game():
         self.bg1 = Background("assets/images/LANDSCAPEF.png")
         self.bg2 = Background("assets/images/KH_BG_1-2.png")
         self.bg3 = Background("assets/images/KH_BG_1-3.png")
+
+        self.death_img = pygame.image.load("assets/images/dead.jpg").convert_alpha()
+
 
         self.player = PlayerClass()
 
@@ -101,7 +107,7 @@ class Game():
             else:
                 dogx = random.randrange(1280 * 2, 1280 * 2 + 300)
             dogx = dogx - self.camera.camera_offset_tracker.x
-            dog = Enemy(dogx, self.enemy_image_path)
+            dog = Enemy(dogx, self.enemy_image_path, self.enemy_lives)
             self.enemy_group.add(dog)
             self.spawn_location = not self.spawn_location
             self.current_spawned += 1
@@ -135,11 +141,12 @@ class Game():
     def display_death_screen(self):
         """Draw the death screen"""
         self.screen.fill((0, 0, 0))
-        font = pygame.font.SysFont(None, 72)
-        text = font.render('You Died', True, (255, 0, 0))
-        self.screen.blit(text, (DISPLAY_W // 2 - text.get_width() // 2, DISPLAY_H // 2 - 100))
-        subtext = font.render('Press RETURN to respawn', True, (255, 255, 255))
-        self.screen.blit(subtext, (DISPLAY_W // 2 - subtext.get_width() // 2, DISPLAY_H // 2))
+        self.screen.blit(self.death_img, (0,0))
+        # font = pygame.font.SysFont(None, 72)
+        # text = font.render('You Died', True, (255, 0, 0))
+        # self.screen.blit(text, (DISPLAY_W // 2 - text.get_width() // 2, DISPLAY_H // 2 - 100))
+        # subtext = font.render('Press RETURN to respawn', True, (255, 255, 255))
+        # self.screen.blit(subtext, (DISPLAY_W // 2 - subtext.get_width() // 2, DISPLAY_H // 2))
 
     def respawn_player(self):
         """Respawn the player and reset the game state"""

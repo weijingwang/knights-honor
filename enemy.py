@@ -8,13 +8,11 @@ FPS = 60
 ENEMY_ATTACK_TIME = 0.5
 
 
-# dog bark sound effect : https://freesound.org/people/deleted_user_3424813/sounds/260776/
-
 class Enemy(pygame.sprite.Sprite):
     """player"""
-    def __init__(self, x, image_path):
+    def __init__(self, x, image_path, TOTALLIVES=3):
 
-        self.TOTALLIVES = 3
+        self.TOTALLIVES = TOTALLIVES
         self.lives = self.TOTALLIVES
         self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
