@@ -32,6 +32,7 @@ class Animation:
     def display_image(self, image_path):
         # Load and display the image
         image = pygame.image.load(image_path).convert_alpha()
+        image = pygame.transform.scale(image,(1280,720))
         self.screen.blit(image, (0, 0))
 
     def run(self):

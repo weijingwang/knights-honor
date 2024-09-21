@@ -47,7 +47,8 @@ class GameStateController():
         self.intro8 = Slideshow("assets/images/intro/8", (0.5,1,1,1), 1000)
         self.intro9 = Animation("assets/images/intro/9", self.screen, 500, False)
         self.intro10 = Animation("assets/images/intro/10", self.screen, 200, False)
-        self.intro11 = Animation("assets/images/intro/11", self.screen, 400, False)
+        self.intro11 = Animation("assets/images/intro/11", self.screen, 200, False)
+        self.intro12 = Animation("assets/images/intro/12", self.screen, 400, False)
 
 
 
@@ -57,7 +58,7 @@ class GameStateController():
         self.level3 = Game(self.screen, self.window, 3)
 
         self.clock = pygame.time.Clock()
-        self.state = "level3"
+        self.state = "intro7"
         self.FPS = 60
         self.can_switch_music1 = True #fadeout
         self.can_switch_music2 = True #new music lions
@@ -107,8 +108,9 @@ class GameStateController():
             self.state = "intro10"
         if not self.intro10.running:
             self.state = "intro11"
-
         if not self.intro11.running:
+            self.state = "intro12"
+        if not self.intro12.running:
             self.state = "level3"
 
     def main_loop(self):
@@ -217,6 +219,13 @@ class GameStateController():
                         self.done = True
                     self.intro11.check_events(event)
                 self.intro11.run()
+
+            elif self.state == "intro12":
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.done = True
+                    self.intro12.check_events(event)
+                self.intro12.run()
 
             elif self.state == "level3":
                 for event in pygame.event.get():

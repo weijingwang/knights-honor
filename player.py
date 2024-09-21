@@ -21,7 +21,7 @@ class PlayerClass(pygame.sprite.Sprite):
         self.attack_timer = 0.2 * FPS
         self.attack_timer_store = self.attack_timer
 
-        self.attack_cooldown_timer = 0.5 * FPS
+        self.attack_cooldown_timer = 0.2 * FPS
         self.attack_cooldown_timer_store = self.attack_cooldown_timer
         self.cooldown_timer_start = False
         

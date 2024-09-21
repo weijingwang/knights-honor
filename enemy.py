@@ -14,7 +14,7 @@ class Enemy(pygame.sprite.Sprite):
     """player"""
     def __init__(self, x, image_path):
 
-        self.TOTALLIVES = 15
+        self.TOTALLIVES = 3
         self.lives = self.TOTALLIVES
         self.knockbacked = False
         pygame.sprite.Sprite.__init__(self)
